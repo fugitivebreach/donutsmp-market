@@ -321,7 +321,9 @@ async def on_ready():
         print(f'❌ Failed to sync commands: {e}')
     
     # Auto-send tickets panel to specified channel
+    print("🔍 About to call auto_send_tickets_panel()...")
     await auto_send_tickets_panel()
+    print("🔍 auto_send_tickets_panel() completed")
     
     # List all guilds the bot is in
     print(f"🔍 Available guilds:")
