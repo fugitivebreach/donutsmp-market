@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 print("🔍 Starting Discord bot script...")
-print("🐍 Python executable:", __import__('sys').executable)
-print("🐍 Python version:", __import__('sys').version)
+import sys
+print("🐍 Python executable:", sys.executable)
+print("🐍 Python version:", sys.version)
+print("🔍 About to import discord...")
 
 try:
     import discord
