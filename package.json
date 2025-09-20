@@ -7,14 +7,16 @@
     "start": "concurrently \"node backend/server.js\" \"python bot/discord_bot.py\"",
     "start:server": "node backend/server.js",
     "start:bot": "python bot/discord_bot.py",
+    "start:production": "concurrently \"node backend/server.js\" \"venv/bin/python bot/discord_bot.py\"",
     "dev": "concurrently \"nodemon backend/server.js\" \"python bot/discord_bot.py\"",
     "bot": "cd bot && python discord_bot.py",
-    "setup": "npm install && pip install -r bot/requirements.txt",
+    "setup": "npm install && python -m venv venv && source venv/bin/activate && pip install -r bot/requirements.txt",
+    "setup:local": "npm install && pip install -r bot/requirements.txt",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf node_modules && npm install",
     "build": "echo \"Build process - static files ready\"",
     "lint": "echo \"Linting - no linter configured\"",
-    "railway:start": "npm run start"
+    "railway:start": "npm run start:production"
   },
   "keywords": [
     "discord",

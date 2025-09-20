@@ -10,10 +10,11 @@
 ### Step 1: Prepare Your Repository
 1. Push your code to GitHub/GitLab
 2. Ensure all files are committed including:
-   - `railway.json`
-   - `nixpacks.toml` 
-   - `Procfile`
-   - `.env.example`
+   - `railway.json` (Docker configuration)
+   - `Dockerfile` (Multi-language build)
+   - `Procfile` (Fallback process definition)
+   - `.env.example` (Environment template)
+   - `.dockerignore` (Build optimization)
 
 ### Step 2: Create Railway Project
 1. Go to https://railway.app

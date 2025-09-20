@@ -1,14 +1,15 @@
 [phases.setup]
-nixPkgs = ['nodejs', 'python3', 'python3Packages.pip']
+nixPkgs = ['nodejs', 'python3', 'python3Packages.pip', 'python3Packages.virtualenv']
 
 [phases.install]
 cmds = [
     'npm install',
-    'pip install -r bot/requirements.txt'
+    'python -m venv venv',
+    'source venv/bin/activate && pip install -r bot/requirements.txt'
 ]
 
 [phases.build]
 cmds = ['npm run build']
 
 [start]
-cmd = 'npm run start'
+cmd = 'source venv/bin/activate && npm run start'
