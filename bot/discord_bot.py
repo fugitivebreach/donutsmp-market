@@ -829,7 +829,14 @@ if __name__ == "__main__":
     print(f"   Server Owner ID: {SERVER_OWNER_ID}")
     print(f"   Allowed Users: {len(ALLOWED_USER_IDS)} configured")
     print(f"   Railway Environment: {os.getenv('RAILWAY_ENVIRONMENT', 'local')}")
-    print(f"   Bot Token: {'SET' if BOT_TOKEN != 'YOUR_BOT_TOKEN_HERE' else 'NOT SET'}")
+    print(f"   Bot Token: {'SET (' + BOT_TOKEN[:10] + '...)' if BOT_TOKEN and BOT_TOKEN != 'YOUR_BOT_TOKEN_HERE' else 'NOT SET'}")
+    
+    # Debug all environment variables
+    print(f"🔍 Environment Variables:")
+    print(f"   BOT_TOKEN: {os.getenv('BOT_TOKEN', 'NOT SET')[:10] if os.getenv('BOT_TOKEN') else 'NOT SET'}...")
+    print(f"   DISCORD_BOT_TOKEN: {os.getenv('DISCORD_BOT_TOKEN', 'NOT SET')[:10] if os.getenv('DISCORD_BOT_TOKEN') else 'NOT SET'}...")
+    print(f"   GUILD_ID: {os.getenv('GUILD_ID', 'NOT SET')}")
+    print(f"   TICKET_CATEGORY_ID: {os.getenv('TICKET_CATEGORY_ID', 'NOT SET')}")
     
     # Check if required environment variables are set
     if BOT_TOKEN == 'YOUR_BOT_TOKEN_HERE' or not BOT_TOKEN:
@@ -837,6 +844,8 @@ if __name__ == "__main__":
         print("   Please set the BOT_TOKEN environment variable")
         print("   In Railway: Add BOT_TOKEN to environment variables")
         print("   Locally: Add BOT_TOKEN=your_token to .env file")
+        print("   Current BOT_TOKEN value:", repr(BOT_TOKEN))
+        print("⚠️  Bot will exit - cannot start without token")
         exit(1)
     
     if GUILD_ID == 123456789012345678:
