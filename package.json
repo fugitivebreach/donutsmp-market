@@ -4,7 +4,7 @@
   "description": "DonutMarket Store - Complete e-commerce solution with Discord integration",
   "main": "backend/server.js",
   "scripts": {
-    "start": "concurrently \"node backend/server.js\" \"cd bot && python3 discord_bot.py\"",
+    "start": "concurrently \"node backend/server.js\" \"cd bot && python3 discord_bot.py 2>&1\"",
     "start:server": "node backend/server.js",
     "start:bot": "python3 bot/discord_bot.py",
     "start:production": "concurrently \"node backend/server.js\" \"cd bot && RAILWAY_ENVIRONMENT=production python3 discord_bot.py\"",

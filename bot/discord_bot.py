@@ -3,11 +3,8 @@ from discord.ext import commands
 import asyncio
 import json
 import os
+import sys
 from datetime import datetime, timezone
-import os
-import asyncio
-import discord
-from discord.ext import commands
 import dotenv
 
 # Load environment variables from parent directory
@@ -821,8 +818,13 @@ async def main():
     # Start bot
     await bot.start(BOT_TOKEN)
 
+print("🔍 Discord bot script loaded successfully!")
+
 if __name__ == "__main__":
     print("🤖 DonutMarket Discord Bot Starting...")
+    print(f"🐍 Python version: {sys.version}")
+    print(f"📁 Current working directory: {os.getcwd()}")
+    print(f"📄 Script path: {__file__}")
     print(f"📋 Configuration:")
     print(f"   Guild ID: {GUILD_ID}")
     print(f"   Category ID: {TICKET_CATEGORY_ID}")
