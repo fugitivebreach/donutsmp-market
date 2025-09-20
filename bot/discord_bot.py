@@ -304,26 +304,37 @@ async def auto_send_tickets_panel():
 
 @bot.event
 async def on_ready():
-    print(f"✅ {bot.user} has connected to Discord!")
-    print(f"📊 Bot is in {len(bot.guilds)} guilds")
-    
-    # Add persistent views for buttons to work after restart
-    bot.add_view(TicketsPanelView())
-    bot.add_view(CloseTicketView())
-    
-    # Sync slash commands
     try:
-        synced = await bot.tree.sync()
-        print(f'✅ Synced {len(synced)} slash command(s)')
-        for cmd in synced:
-            print(f'   - /{cmd.name}')
+        print(f"✅ {bot.user} has connected to Discord!")
+        print(f"📊 Bot is in {len(bot.guilds)} guilds")
+        
+        # Add persistent views for buttons to work after restart
+        print("🔍 Adding persistent views...")
+        bot.add_view(TicketsPanelView())
+        bot.add_view(CloseTicketView())
+        print("✅ Persistent views added")
+        
+        # Sync slash commands
+        print("🔍 Syncing slash commands...")
+        try:
+            synced = await bot.tree.sync()
+            print(f'✅ Synced {len(synced)} slash command(s)')
+            for cmd in synced:
+                print(f'   - /{cmd.name}')
+        except Exception as e:
+            print(f'❌ Failed to sync commands: {e}')
+        
+        # Auto-send tickets panel to specified channel
+        print("🔍 About to call auto_send_tickets_panel()...")
+        await auto_send_tickets_panel()
+        print("🔍 auto_send_tickets_panel() completed")
+        
+        print("✅ Bot startup completed successfully!")
+        
     except Exception as e:
-        print(f'❌ Failed to sync commands: {e}')
-    
-    # Auto-send tickets panel to specified channel
-    print("🔍 About to call auto_send_tickets_panel()...")
-    await auto_send_tickets_panel()
-    print("🔍 auto_send_tickets_panel() completed")
+        print(f"❌ Error in on_ready: {e}")
+        import traceback
+        traceback.print_exc()
     
     # List all guilds the bot is in
     print(f"🔍 Available guilds:")
