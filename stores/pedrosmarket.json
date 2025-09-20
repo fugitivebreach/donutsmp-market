@@ -35,6 +35,15 @@
       "productType": "item",
       "productDescription": "High-quality skeleton spawners for bone farms",
       "instantDelivery": true
+    },
+    {
+      "productName": "Netherite Set",
+      "productImage": "https://donutmarket.store/static/logo1.png",
+      "productPrice": 2,
+      "productCurrency": "USD",
+      "productType": "item",
+      "productDescription": "High-quality protection 4 gear full netherite",
+      "instantDelivery": true
     }
   ]
 }
