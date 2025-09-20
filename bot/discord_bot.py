@@ -524,6 +524,11 @@ if AIOHTTP_AVAILABLE:
 
 async def start_web_server():
     """Start the web server for webhooks"""
+    # Skip webhook server in Railway production (Express server handles webhooks)
+    if os.getenv('RAILWAY_ENVIRONMENT') == 'production':
+        print("🚀 Running in Railway production - webhook server handled by Express")
+        return
+        
     if not AIOHTTP_AVAILABLE:
         print("⚠️  Webhook server disabled - aiohttp not available")
         return

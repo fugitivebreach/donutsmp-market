@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 3000;
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || 'YOUR_DISCORD_CLIENT_ID';
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || 'YOUR_DISCORD_CLIENT_SECRET';
 const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/auth/callback';
-const DISCORD_BOT_WEBHOOK_URL = process.env.DISCORD_BOT_WEBHOOK_URL || 'http://localhost:8080/webhook/purchase';
+const DISCORD_BOT_WEBHOOK_URL = process.env.DISCORD_BOT_WEBHOOK_URL || 
+    (process.env.RAILWAY_ENVIRONMENT === 'production' 
+        ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'donutmarket.up.railway.app'}/webhook/purchase`
+        : 'http://localhost:8080/webhook/purchase');
 
 // Middleware
 const allowedOrigins = process.env.RAILWAY_ENVIRONMENT === 'production' 
@@ -260,36 +263,45 @@ app.post('/api/create-ticket', async (req, res) => {
         console.log('📋 Webhook data:', JSON.stringify(webhookData, null, 2));
         
         try {
-            // Check if Discord bot is running first
-            const healthCheck = await axios.get('http://localhost:8080/health', { timeout: 2000 }).catch(() => null);
+            let ticketResponse;
             
-            if (!healthCheck) {
-                console.log('⚠️  Discord bot webhook server is not running');
-                throw new Error('Discord bot webhook server is offline');
+            if (process.env.RAILWAY_ENVIRONMENT === 'production') {
+                // Use internal ticket creation for Railway
+                ticketResponse = await createDiscordTicketInternal(webhookData);
+                if (ticketResponse) {
+                    console.log('✅ Discord ticket created internally:', ticketResponse);
+                } else {
+                    throw new Error('Failed to create internal ticket');
+                }
+            } else {
+                // Use webhook for local development
+                const healthCheck = await axios.get('http://localhost:8080/health', { timeout: 2000 }).catch(() => null);
+                
+                if (!healthCheck) {
+                    console.log('⚠️  Discord bot webhook server is not running');
+                    throw new Error('Discord bot webhook server is offline');
+                }
+                
+                const response = await axios.post(DISCORD_BOT_WEBHOOK_URL, webhookData, {
+                    timeout: 10000,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                ticketResponse = response.data;
+                console.log('✅ Discord webhook response:', ticketResponse);
             }
             
-            const response = await axios.post(DISCORD_BOT_WEBHOOK_URL, webhookData, {
-                timeout: 10000,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            res.json({
+                success: true,
+                message: 'Ticket created successfully',
+                transactionId: transactionId,
+                ticketData: ticketResponse
             });
             
-            console.log('✅ Discord webhook response:', response.data);
-            
-            if (response.data.success) {
-                res.json({
-                    success: true,
-                    message: 'Ticket created successfully',
-                    ticketId: response.data.ticket_id,
-                    ticketName: response.data.ticket_name
-                });
-            } else {
-                throw new Error(response.data.error || 'Failed to create ticket');
-            }
-            
-        } catch (webhookError) {
-            console.error('❌ Discord webhook error:', webhookError.message);
+        } catch (error) {
+            console.error('❌ Discord webhook error:', error.message);
             console.error('🔗 Webhook URL:', DISCORD_BOT_WEBHOOK_URL);
             console.error('💡 Make sure the Discord bot is running: python bot/discord_bot.py');
             
@@ -378,6 +390,37 @@ app.get('/api/all-stores', (req, res) => {
         res.status(500).json({ error: 'Failed to load stores' });
     }
 });
+
+// Discord bot webhook endpoint (for Railway deployment)
+app.post('/webhook/purchase', (req, res) => {
+    console.log('🔔 Received webhook from Discord bot:', req.body);
+    res.json({ success: true, message: 'Webhook received' });
+});
+
+// Internal function to create Discord tickets (for Railway)
+async function createDiscordTicketInternal(ticketData) {
+    if (process.env.RAILWAY_ENVIRONMENT !== 'production') {
+        return null; // Only use this in Railway production
+    }
+    
+    try {
+        // In Railway, we'll store ticket data in a simple queue/file system
+        // The Discord bot will periodically check for new tickets
+        const ticketsDir = path.join(__dirname, '../tickets');
+        if (!fs.existsSync(ticketsDir)) {
+            fs.mkdirSync(ticketsDir, { recursive: true });
+        }
+        
+        const ticketFile = path.join(ticketsDir, `ticket_${ticketData.transactionId}.json`);
+        fs.writeFileSync(ticketFile, JSON.stringify(ticketData, null, 2));
+        
+        console.log('✅ Ticket data saved for Discord bot processing:', ticketFile);
+        return { success: true, ticket_id: ticketData.transactionId };
+    } catch (error) {
+        console.error('❌ Error saving ticket data:', error);
+        return null;
+    }
+}
 
 // Test ticket creation endpoint
 app.post('/api/test-ticket', async (req, res) => {
