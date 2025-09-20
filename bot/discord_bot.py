@@ -563,10 +563,96 @@ async def start_web_server():
         print(f"❌ Failed to start webhook server: {e}")
         print("🤖 Bot will continue without webhook functionality")
 
+async def process_ticket_files():
+    """Process ticket files created by Express server (Railway mode)"""
+    if os.getenv('RAILWAY_ENVIRONMENT') != 'production':
+        return
+        
+    tickets_dir = os.path.join(os.path.dirname(__file__), '..', 'tickets')
+    if not os.path.exists(tickets_dir):
+        return
+        
+    for filename in os.listdir(tickets_dir):
+        if filename.startswith('ticket_') and filename.endswith('.json'):
+            file_path = os.path.join(tickets_dir, filename)
+            try:
+                with open(file_path, 'r') as f:
+                    ticket_data = json.load(f)
+                
+                print(f"🎫 Processing ticket file: {filename}")
+                
+                # Create Discord ticket
+                guild = bot.get_guild(GUILD_ID)
+                if guild:
+                    category = guild.get_channel(TICKET_CATEGORY_ID)
+                    if category:
+                        # Create ticket channel
+                        channel_name = f"purchase-{ticket_data['buyer'].replace('#', '').replace('.', '').lower()}-{datetime.now().strftime('%m%d%H%M')}"
+                        
+                        overwrites = {
+                            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                            guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+                        }
+                        
+                        # Add user permissions if they're in the server
+                        for member in guild.members:
+                            if str(member) == ticket_data['discord']:
+                                overwrites[member] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
+                                break
+                        
+                        channel = await category.create_text_channel(
+                            name=channel_name,
+                            overwrites=overwrites
+                        )
+                        
+                        # Create embed
+                        embed = discord.Embed(
+                            title="🛒 New Purchase",
+                            description=f"Purchase from {ticket_data.get('store', 'DonutMarket')}",
+                            color=0x036fff,
+                            timestamp=datetime.now(timezone.utc)
+                        )
+                        
+                        embed.add_field(name="👤 Buyer", value=ticket_data['buyer'], inline=True)
+                        embed.add_field(name="💰 Total", value=f"${ticket_data['totalAmount']}", inline=True)
+                        embed.add_field(name="🆔 Transaction", value=ticket_data['transactionId'], inline=True)
+                        
+                        items_text = ""
+                        for item in ticket_data['items']:
+                            items_text += f"• {item['name']} - {item['amount']} (${item['price']})\n"
+                        
+                        embed.add_field(name="📦 Items", value=items_text, inline=False)
+                        embed.add_field(name="🏪 Store", value=ticket_data.get('store', 'DonutMarket'), inline=True)
+                        
+                        await channel.send(embed=embed)
+                        
+                        print(f"✅ Created Discord ticket: {channel.name}")
+                        
+                        # Delete processed file
+                        os.remove(file_path)
+                        print(f"🗑️ Removed processed ticket file: {filename}")
+                        
+            except Exception as e:
+                print(f"❌ Error processing ticket file {filename}: {e}")
+
+async def ticket_file_watcher():
+    """Watch for new ticket files every 5 seconds"""
+    while True:
+        try:
+            await process_ticket_files()
+        except Exception as e:
+            print(f"❌ Error in ticket file watcher: {e}")
+        await asyncio.sleep(5)
+
 async def main():
     """Main function to start both bot and web server"""
-    # Start web server
+    # Start web server (only in local mode)
     await start_web_server()
+    
+    # Start ticket file watcher (only in Railway mode)
+    if os.getenv('RAILWAY_ENVIRONMENT') == 'production':
+        print("🎫 Starting ticket file watcher for Railway mode...")
+        asyncio.create_task(ticket_file_watcher())
     
     # Start bot
     await bot.start(BOT_TOKEN)
@@ -578,33 +664,24 @@ if __name__ == "__main__":
     print(f"   Category ID: {TICKET_CATEGORY_ID}")
     print(f"   Server Owner ID: {SERVER_OWNER_ID}")
     print(f"   Allowed Users: {len(ALLOWED_USER_IDS)} configured")
-    print(f"   Allowed Roles: {len(ALLOWED_ROLE_IDS)} configured")
+    print(f"   Railway Environment: {os.getenv('RAILWAY_ENVIRONMENT', 'local')}")
+    print(f"   Bot Token: {'SET' if BOT_TOKEN != 'YOUR_BOT_TOKEN_HERE' else 'NOT SET'}")
     
-    # Configuration validation
-    if BOT_TOKEN == "YOUR_BOT_TOKEN_HERE" or not BOT_TOKEN:
-        print("❌ Please set your BOT_TOKEN in the .env file")
-        print("   Example: BOT_TOKEN=your_actual_bot_token_here")
+    # Check if required environment variables are set
+    if BOT_TOKEN == 'YOUR_BOT_TOKEN_HERE':
+        print("❌ BOT_TOKEN not configured!")
+        print("   Please set the DISCORD_BOT_TOKEN environment variable")
         exit(1)
     
     if GUILD_ID == 123456789012345678:
-        print("⚠️  Please set your GUILD_ID in the .env file")
-        print("   Example: GUILD_ID=your_server_id_here")
+        print("⚠️  GUILD_ID not configured - using default")
+        print("   Please set the GUILD_ID environment variable")
     
     if TICKET_CATEGORY_ID == 123456789012345678:
-        print("⚠️  Please set your TICKET_CATEGORY_ID in the .env file")
-        print("   Example: TICKET_CATEGORY_ID=your_category_id_here")
+        print("⚠️  TICKET_CATEGORY_ID not configured - using default")
+        print("   Please set the TICKET_CATEGORY_ID environment variable")
     
-    if SERVER_OWNER_ID == 123456789012345678:
-        print("⚠️  Please set your SERVER_OWNER_ID in the .env file")
-        print("   Example: SERVER_OWNER_ID=your_user_id_here")
-    
-    if not ALLOWED_USER_IDS:
-        print("⚠️  No ALLOWED_USER_IDS configured - only server owner will have access")
-        print("   Example: ALLOWED_USER_IDS=123456789012345678,987654321098765432")
-    
-    if not ALLOWED_ROLE_IDS:
-        print("⚠️  No ALLOWED_ROLE_IDS configured - only users and server owner will have access")
-        print("   Example: ALLOWED_ROLE_IDS=123456789012345678,987654321098765432")
+    print(f"   Allowed Roles: {len(ALLOWED_ROLE_IDS)} configured")
     
     print("\n🚀 Starting bot and webhook server...")
     
@@ -612,10 +689,8 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\n🛑 Bot stopped by user")
+        print("\n👋 Bot stopped by user")
     except Exception as e:
-        print(f"\n❌ Error running bot: {e}")
-        print("💡 Make sure you have:")
-        print("   1. Created a .env file with your Discord bot token")
-        print("   2. Configured all required IDs in the .env file")
-        print("   3. Installed dependencies: pip install -r requirements.txt")
+        print(f"\n❌ Bot crashed: {e}")
+        import traceback
+        traceback.print_exc()
