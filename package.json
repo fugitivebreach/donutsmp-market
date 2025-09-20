@@ -7,7 +7,7 @@
     "start": "concurrently \"node backend/server.js\" \"python3 bot/discord_bot.py\"",
     "start:server": "node backend/server.js",
     "start:bot": "python3 bot/discord_bot.py",
-    "start:production": "concurrently \"node backend/server.js\" \"RAILWAY_ENVIRONMENT=production venv/bin/python3 bot/discord_bot.py\"",
+    "start:production": "concurrently \"node backend/server.js\" \"cd bot && RAILWAY_ENVIRONMENT=production python3 discord_bot.py\"",
     "dev": "concurrently \"nodemon backend/server.js\" \"python3 bot/discord_bot.py\"",
     "bot": "cd bot && python3 discord_bot.py",
     "setup": "npm install && python3 -m venv venv && source venv/bin/activate && pip install -r bot/requirements.txt",
