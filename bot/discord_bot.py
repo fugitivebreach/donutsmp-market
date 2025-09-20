@@ -111,6 +111,10 @@ async def on_ready():
     print(f"✅ {bot.user} has connected to Discord!")
     print(f"📊 Bot is in {len(bot.guilds)} guilds")
     
+    # Add persistent views for buttons to work after restart
+    bot.add_view(TicketsPanelView())
+    bot.add_view(CloseTicketView())
+    
     # List all guilds the bot is in
     print(f"🔍 Available guilds:")
     for g in bot.guilds:
@@ -126,18 +130,11 @@ async def on_ready():
         else:
             print(f"❌ Ticket category not found (ID: {TICKET_CATEGORY_ID})")
             print(f"🔍 Available categories in {guild.name}:")
-            for cat in guild.categories:
-                print(f"   - {cat.name} (ID: {cat.id})")
-    else:
-        print(f"❌ Guild not found (ID: {GUILD_ID})")
-        print(f"💡 Update your .env file with the correct GUILD_ID from the list above")
     
     # Sync slash commands
     try:
         synced = await bot.tree.sync()
-        print(f'🔄 Synced {len(synced)} slash command(s)')
-        for cmd in synced:
-            print(f'   /{cmd.name} - {cmd.description}')
+        print(f'✅ Synced {len(synced)} command(s)')
     except Exception as e:
         print(f'❌ Failed to sync commands: {e}')
     
@@ -347,19 +344,6 @@ async def test_purchase_command(interaction: discord.Interaction):
         items=test_items
     )
     
-    if ticket_channel:
-        await interaction.followup.send(f"✅ Test purchase ticket created: {ticket_channel.mention}")
-    else:
-        await interaction.followup.send("❌ Failed to create test purchase ticket.")
-
-@bot.tree.command(name="close_ticket", description="Close the current ticket channel")
-async def close_ticket_command(interaction: discord.Interaction):
-    """Command to close a ticket"""
-    if not await has_ticket_permissions(interaction.user, interaction.guild):
-        await interaction.response.send_message("❌ You don't have permission to close tickets.", ephemeral=True)
-        return
-    
-    channel = interaction.channel
     
     # Check if this is a ticket channel
     if not (channel.name.startswith('ticket-') or channel.name.startswith('purchase-')):
@@ -408,7 +392,7 @@ async def bot_info_command(interaction: discord.Interaction):
     
     embed.set_footer(text="DonutMarket Ticket System")
     
-    await interaction.response.send_message(embed=embed, ephemeral=True)
+    await interaction.response.send_message(embed=embed, ephemeral=False)
 
 @bot.tree.command(name="list_tickets", description="List all open tickets")
 async def list_tickets_command(interaction: discord.Interaction):
@@ -449,6 +433,177 @@ async def list_tickets_command(interaction: discord.Interaction):
             embed.set_footer(text=f"Showing 10 of {len(tickets)} tickets")
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
+
+@bot.tree.command(name="tickets-panel", description="Send a tickets panel to a channel")
+async def tickets_panel(interaction: discord.Interaction, channel: discord.TextChannel, message_id: str = None):
+    """Send or edit a tickets panel with claim rewards button"""
+    
+    # Check permissions
+    if not await has_ticket_permissions(interaction.user, interaction.guild):
+        await interaction.response.send_message("❌ You don't have permission to use this command.", ephemeral=True)
+        return
+    
+    # Create the embed
+    embed = discord.Embed(
+        title="🎫 Tickets Panel",
+        description="Need help or want to claim rewards? Use the button below!",
+        color=0x036fff
+    )
+    
+    embed.add_field(
+        name="📋 How to use:",
+        value="• Click **Claim Rewards** to create a ticket\n• Staff will assist you as soon as possible\n• Only create tickets when needed",
+        inline=False
+    )
+    
+    embed.add_field(
+        name="⏰ Response Time:",
+        value="We typically respond within 1-24 hours",
+        inline=True
+    )
+    
+    embed.add_field(
+        name="🏪 Store Support:",
+        value="For purchase issues, include your transaction ID",
+        inline=True
+    )
+    
+    embed.set_footer(text="DonutMarket Support System", icon_url="https://donutmarket.store/static/logo1.png")
+    
+    # Create the view with claim rewards button
+    view = TicketsPanelView()
+    
+    try:
+        if message_id and message_id.lower() != "none":
+            # Edit existing message
+            try:
+                message = await channel.fetch_message(int(message_id))
+                await message.edit(embed=embed, view=view)
+                await interaction.response.send_message(f"✅ Updated tickets panel in {channel.mention}", ephemeral=True)
+            except discord.NotFound:
+                await interaction.response.send_message("❌ Message not found. Sending new panel instead.", ephemeral=True)
+                message = await channel.send(embed=embed, view=view)
+                await interaction.followup.send(f"✅ New tickets panel sent to {channel.mention}\n**Message ID:** `{message.id}`", ephemeral=True)
+            except ValueError:
+                await interaction.response.send_message("❌ Invalid message ID. Sending new panel instead.", ephemeral=True)
+                message = await channel.send(embed=embed, view=view)
+                await interaction.followup.send(f"✅ New tickets panel sent to {channel.mention}\n**Message ID:** `{message.id}`", ephemeral=True)
+        else:
+            # Send new message
+            message = await channel.send(embed=embed, view=view)
+            await interaction.response.send_message(f"✅ Tickets panel sent to {channel.mention}\n**Message ID:** `{message.id}`", ephemeral=True)
+            
+    except discord.Forbidden:
+        await interaction.response.send_message("❌ I don't have permission to send messages in that channel.", ephemeral=True)
+    except Exception as e:
+        await interaction.response.send_message(f"❌ Error: {str(e)}", ephemeral=True)
+
+class TicketsPanelView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+    
+    @discord.ui.button(label="Claim Rewards", style=discord.ButtonStyle.gray, emoji="🎁")
+    async def claim_rewards(self, interaction: discord.Interaction, button: discord.ui.Button):
+        """Handle claim rewards button click"""
+        
+        guild = interaction.guild
+        category = guild.get_channel(TICKET_CATEGORY_ID)
+        
+        if not category:
+            await interaction.response.send_message("❌ Ticket category not found. Please contact an administrator.", ephemeral=True)
+            return
+        
+        # Check if user already has an open ticket
+        existing_ticket = None
+        for channel in category.channels:
+            if channel.name.startswith(f"rewards-{interaction.user.name.lower()}"):
+                existing_ticket = channel
+                break
+        
+        if existing_ticket:
+            await interaction.response.send_message(f"❌ You already have an open ticket: {existing_ticket.mention}", ephemeral=True)
+            return
+        
+        try:
+            # Create ticket channel
+            channel_name = f"rewards-{interaction.user.name.lower()}-{datetime.now().strftime('%m%d%H%M')}"
+            
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                interaction.user: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+            }
+            
+            # Add staff permissions
+            for role_id in ALLOWED_ROLE_IDS:
+                role = guild.get_role(role_id)
+                if role:
+                    overwrites[role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
+            
+            channel = await category.create_text_channel(
+                name=channel_name,
+                overwrites=overwrites
+            )
+            
+            # Create welcome embed
+            embed = discord.Embed(
+                title="🎁 Claim Rewards Ticket",
+                description=f"Hello {interaction.user.mention}! Welcome to your rewards ticket.",
+                color=0x4caf50,
+                timestamp=datetime.now(timezone.utc)
+            )
+            
+            embed.add_field(
+                name="📋 What to include:",
+                value="• Your Discord username\n• What rewards you're claiming\n• Any relevant screenshots or proof\n• Transaction IDs if applicable",
+                inline=False
+            )
+            
+            embed.add_field(
+                name="⏰ Next Steps:",
+                value="A staff member will review your request and assist you shortly.",
+                inline=False
+            )
+            
+            embed.set_footer(text="DonutMarket Support", icon_url="https://donutmarket.store/static/logo1.png")
+            
+            # Add close button
+            close_view = CloseTicketView()
+            
+            await channel.send(f"🎫 **Ticket Created**\n{interaction.user.mention}", embed=embed, view=close_view)
+            
+            await interaction.response.send_message(f"✅ Your rewards ticket has been created: {channel.mention}", ephemeral=True)
+            
+        except discord.Forbidden:
+            await interaction.response.send_message("❌ I don't have permission to create channels.", ephemeral=True)
+        except Exception as e:
+            await interaction.response.send_message(f"❌ Error creating ticket: {str(e)}", ephemeral=True)
+
+class CloseTicketView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+    
+    @discord.ui.button(label="Close Ticket", style=discord.ButtonStyle.red, emoji="🔒")
+    async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
+        """Handle close ticket button"""
+        
+        # Check if user has permission to close
+        if not await has_ticket_permissions(interaction.user, interaction.guild):
+            await interaction.response.send_message("❌ You don't have permission to close tickets.", ephemeral=True)
+            return
+        
+        embed = discord.Embed(
+            title="🔒 Ticket Closed",
+            description=f"This ticket has been closed by {interaction.user.mention}",
+            color=0xff0000,
+            timestamp=datetime.now(timezone.utc)
+        )
+        
+        await interaction.response.send_message(embed=embed)
+        
+        # Delete channel after 5 seconds
+        await asyncio.sleep(5)
+        await interaction.followup.channel.delete()
 
 # Web server integration (for receiving purchase webhooks)
 try:
