@@ -115,6 +115,15 @@ async def on_ready():
     bot.add_view(TicketsPanelView())
     bot.add_view(CloseTicketView())
     
+    # Sync slash commands
+    try:
+        synced = await bot.tree.sync()
+        print(f'✅ Synced {len(synced)} slash command(s)')
+        for cmd in synced:
+            print(f'   - /{cmd.name}')
+    except Exception as e:
+        print(f'❌ Failed to sync commands: {e}')
+    
     # List all guilds the bot is in
     print(f"🔍 Available guilds:")
     for g in bot.guilds:
