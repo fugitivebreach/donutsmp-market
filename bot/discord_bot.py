@@ -237,6 +237,69 @@ class CloseTicketView(discord.ui.View):
         await asyncio.sleep(5)
         await interaction.followup.channel.delete()
 
+async def auto_send_tickets_panel():
+    """Automatically send tickets panel to specified channel on bot startup"""
+    PANEL_CHANNEL_ID = 1418736927112302602
+    
+    try:
+        print(f"🎫 Auto-sending tickets panel to channel {PANEL_CHANNEL_ID}...")
+        
+        # Get the channel
+        channel = bot.get_channel(PANEL_CHANNEL_ID)
+        if not channel:
+            print(f"❌ Could not find channel with ID {PANEL_CHANNEL_ID}")
+            return
+        
+        print(f"✅ Found channel: #{channel.name}")
+        
+        # Purge all messages in the channel
+        try:
+            deleted = await channel.purge(limit=100)
+            print(f"🗑️ Purged {len(deleted)} messages from #{channel.name}")
+        except discord.Forbidden:
+            print(f"⚠️ No permission to purge messages in #{channel.name}")
+        except Exception as e:
+            print(f"⚠️ Error purging messages: {e}")
+        
+        # Create the tickets panel embed
+        embed = discord.Embed(
+            title="🎫 Tickets Panel",
+            description="Need help or want to claim rewards? Use the button below!",
+            color=0x036fff
+        )
+        
+        embed.add_field(
+            name="📋 How to use:",
+            value="• Click **Claim Rewards** to create a ticket\n• Staff will assist you as soon as possible\n• Only create tickets when needed",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="⏰ Response Time:",
+            value="We typically respond within 1-24 hours",
+            inline=True
+        )
+        
+        embed.add_field(
+            name="🏪 Store Support:",
+            value="For purchase issues, include your transaction ID",
+            inline=True
+        )
+        
+        embed.set_footer(text="DonutMarket Support System", icon_url="https://donutmarket.store/static/logo1.png")
+        
+        # Create the view with claim rewards button
+        view = TicketsPanelView()
+        
+        # Send the panel
+        message = await channel.send(embed=embed, view=view)
+        print(f"✅ Tickets panel sent to #{channel.name} (Message ID: {message.id})")
+        
+    except Exception as e:
+        print(f"❌ Error auto-sending tickets panel: {e}")
+        import traceback
+        traceback.print_exc()
+
 @bot.event
 async def on_ready():
     print(f"✅ {bot.user} has connected to Discord!")
@@ -254,6 +317,9 @@ async def on_ready():
             print(f'   - /{cmd.name}')
     except Exception as e:
         print(f'❌ Failed to sync commands: {e}')
+    
+    # Auto-send tickets panel to specified channel
+    await auto_send_tickets_panel()
     
     # List all guilds the bot is in
     print(f"🔍 Available guilds:")
