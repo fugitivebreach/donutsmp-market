@@ -186,8 +186,38 @@
         .sorter-tab.active {
             background: #036fff;
             color: #fff;
-            border-bottom: 2px solid #1e2124;
-            z-index: 2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(3, 111, 255, 0.4);
+        }
+
+        .shops-tab-section {
+            display: flex;
+            justify-content: center;
+            margin: 30px auto 20px auto;
+            max-width: 1100px;
+        }
+
+        .shops-tab {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shops-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
         }
 
         .instant-delivery-badge {
@@ -363,6 +393,15 @@
             <button class="sorter-tab" data-category="raffle">
                 <span style="font-size:28px;vertical-align:middle;">🎰</span>
             </button>
+        </div>
+
+        <!-- Shops Tab Section -->
+        <div class="shops-tab-section">
+            <a href="https://donutmarket.up.railway.app/stores.html" class="shops-tab">
+                <i class="fas fa-store"></i>
+                <span>Browse All Shops</span>
+                <i class="fas fa-external-link-alt" style="font-size: 0.9rem;"></i>
+            </a>
         </div>
 
         <div class="products" data-price-per-million="0.16">
