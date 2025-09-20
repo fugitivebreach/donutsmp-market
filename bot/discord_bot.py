@@ -136,7 +136,7 @@ class TicketsPanelView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
     
-    @discord.ui.button(label="Claim Rewards", style=discord.ButtonStyle.gray, emoji="🎁")
+    @discord.ui.button(label="Claim Rewards", style=discord.ButtonStyle.gray, emoji="🎁", custom_id="claim_rewards_button")
     async def claim_rewards(self, interaction: discord.Interaction, button: discord.ui.Button):
         """Handle claim rewards button click"""
         
@@ -217,7 +217,7 @@ class CloseTicketView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
     
-    @discord.ui.button(label="Close Ticket", style=discord.ButtonStyle.red, emoji="🔒")
+    @discord.ui.button(label="Close Ticket", style=discord.ButtonStyle.red, emoji="🔒", custom_id="close_ticket_button")
     async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
         """Handle close ticket button"""
         
