@@ -1,11 +1,33 @@
-import discord
-from discord.ext import commands
+print("🔍 Starting Discord bot script...")
+
+try:
+    import discord
+    print("✅ discord.py imported successfully")
+except ImportError as e:
+    print(f"❌ Failed to import discord.py: {e}")
+    exit(1)
+
+try:
+    from discord.ext import commands
+    print("✅ discord.ext.commands imported successfully")
+except ImportError as e:
+    print(f"❌ Failed to import discord.ext.commands: {e}")
+    exit(1)
+
 import asyncio
 import json
 import os
 import sys
 from datetime import datetime, timezone
-import dotenv
+
+try:
+    import dotenv
+    print("✅ python-dotenv imported successfully")
+except ImportError as e:
+    print(f"❌ Failed to import python-dotenv: {e}")
+    exit(1)
+
+print("🔍 All imports successful!")
 
 # Load environment variables from parent directory
 dotenv.load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', 'config', '.env'))
