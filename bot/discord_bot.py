@@ -1,4 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 print("🔍 Starting Discord bot script...")
+print("🐍 Python executable:", __import__('sys').executable)
+print("🐍 Python version:", __import__('sys').version)
 
 try:
     import discord
