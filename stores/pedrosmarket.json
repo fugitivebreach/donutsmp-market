@@ -1,0 +1,40 @@
+{
+  "storeId": "pedrosmarket",
+  "storeName": "Pedro's Market",
+  "storeBannerImage": "https://cdn.discordapp.com/avatars/1389809823809273896/aba4c592c981326cec48d0162526c71b.png?size=1024",
+  "storeDescription": "Pedro's premium marketplace for DonutSMP items",
+  "storeOwner": "Pedro",
+  "paymentMethods": ["Venmo", "CashApp", "PayPal"],
+  "storeProducts": [
+    {
+      "productName": "DonutSMP Money",
+      "productImage": "https://donutmarket.store/static/logo1.png",
+      "productPrice": 0.10,
+      "productCurrency": "USD",
+      "productType": "currency",
+      "productUnit": "M",
+      "minAmount": 5,
+      "maxAmount": 180,
+      "defaultAmount": 5,
+      "instantDelivery": true
+    },
+    {
+      "productName": "Elytra",
+      "productImage": "https://donutmarket.store/static/logo1.png",
+      "productPrice": 20,
+      "productCurrency": "USD",
+      "productType": "item",
+      "productDescription": "Premium flight wings for exploring",
+      "instantDelivery": true
+    },
+    {
+      "productName": "Skeleton Spawners",
+      "productImage": "https://donutmarket.store/static/logo1.png",
+      "productPrice": 0.15,
+      "productCurrency": "USD",
+      "productType": "item",
+      "productDescription": "High-quality skeleton spawners for bone farms",
+      "instantDelivery": true
+    }
+  ]
+}

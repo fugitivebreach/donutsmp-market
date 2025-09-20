@@ -1,0 +1,52 @@
+{
+  "name": "donutmarket-store",
+  "version": "1.0.0",
+  "description": "DonutMarket Store - Complete e-commerce solution with Discord integration",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "concurrently \"node backend/server.js\" \"python bot/discord_bot.py\"",
+    "start:server": "node backend/server.js",
+    "start:bot": "python bot/discord_bot.py",
+    "dev": "concurrently \"nodemon backend/server.js\" \"python bot/discord_bot.py\"",
+    "bot": "cd bot && python discord_bot.py",
+    "setup": "npm install && pip install -r bot/requirements.txt",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf node_modules && npm install",
+    "build": "echo \"Build process - static files ready\"",
+    "lint": "echo \"Linting - no linter configured\"",
+    "railway:start": "npm run start"
+  },
+  "keywords": [
+    "discord",
+    "ecommerce",
+    "minecraft",
+    "donutsmp",
+    "store",
+    "oauth",
+    "tickets"
+  ],
+  "author": "DonutMarket Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "axios": "^1.6.0",
+    "express-session": "^1.17.3",
+    "dotenv": "^16.3.1",
+    "concurrently": "^8.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donutmarket/store.git"
+  },
+  "bugs": {
+    "url": "https://github.com/donutmarket/store/issues"
+  },
+  "homepage": "https://donutmarket.store"
+}

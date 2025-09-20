@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - DonutMarket | Discord Authentication</title>
+    <meta name="description" content="Login to DonutMarket with Discord to access secure purchasing, order tracking, and 24/7 support for DonutSMP items.">
+    <meta name="theme-color" content="#036fff">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: transparent;
+            color: #fff;
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #background-image {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: url('https://donutmarket.store/static/store.png') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(4px) brightness(0.3);
+        }
+
+        #background-overlay {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(24, 26, 27, 0.8) 0%, rgba(24, 26, 27, 0.6) 50%, rgba(24, 26, 27, 0.9) 100%);
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(35, 39, 43, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(3, 111, 255, 0.3);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            min-width: 400px;
+            max-width: 95vw;
+            text-align: center;
+            animation: slideIn 0.6s ease;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            margin: 0 auto 1.5rem auto;
+            display: block;
+        }
+
+        .login-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .login-subtitle {
+            color: #8ecfff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .auth-required-box {
+            background: rgba(24, 26, 27, 0.8);
+            border: 1px solid rgba(3, 111, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .auth-required-title {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .auth-required-subtitle {
+            color: #ff6b6b;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .auth-description {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .benefits-list {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .benefits-title {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .discord-login-btn {
+            background: #5865F2;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+            cursor: pointer;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discord-login-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(88, 101, 242, 0.6);
+        }
+
+        .discord-login-btn:active {
+            transform: translateY(0);
+        }
+
+        .discord-login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .discord-login-btn:hover::before {
+            left: 100%;
+        }
+
+        .back-link {
+            color: #8ecfff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+
+        .security-note {
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: 1.5rem;
+            font-style: italic;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+                min-width: 320px;
+                margin: 1rem;
+            }
+
+            .login-title {
+                font-size: 1.8rem;
+            }
+
+            .login-subtitle {
+                font-size: 1rem;
+            }
+
+            .discord-login-btn {
+                font-size: 1.1rem;
+                padding: 0.9rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="background-image"></div>
+    <div id="background-overlay"></div>
+
+    <div class="login-container">
+        <img src="https://donutmarket.store/static/logo1.png" alt="DonutMarket Logo" class="logo">
+        
+        <h1 class="login-title">DonutMarket</h1>
+        <p class="login-subtitle">Secure Discord Authentication</p>
+
+        <div class="auth-required-box">
+            <div class="auth-required-title">
+                <i class="fas fa-lock" style="color: #036fff;"></i>
+                Login Required
+            </div>
+            <div class="auth-required-subtitle">Authentication Required</div>
+            <p class="auth-description">
+                You must be logged in with Discord to make purchases. This allows you to create support tickets and ensures you receive your items properly.
+            </p>
+
+            <div class="benefits-title">
+                <i class="fas fa-question-circle" style="color: #036fff;"></i>
+                Why Login?
+            </div>
+            <ul class="benefits-list">
+                <li>Secure payment processing</li>
+                <li>Order tracking and history</li>
+                <li>Referral system access</li>
+                <li>24/7 Discord support</li>
+            </ul>
+        </div>
+
+        <button class="discord-login-btn pulse-animation" onclick="loginWithDiscord()">
+            <i class="fab fa-discord" style="margin-right: 10px; font-size: 1.3rem;"></i>
+            Login with Discord
+        </button>
+
+        <p class="security-note">
+            <i class="fas fa-shield-alt" style="margin-right: 4px;"></i>
+            Secure OAuth2 authentication via Discord
+        </p>
+
+        <a href="replica.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Store
+        </a>
+    </div>
+
+    <script>
+        function loginWithDiscord() {
+            // Show loading state
+            const btn = document.querySelector('.discord-login-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Connecting to Discord...';
+            btn.disabled = true;
+
+            // Redirect to backend login route which handles Discord OAuth
+            window.location.href = '/login';
+        }
+
+        // Check if user is already logged in via session
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/user');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.user) {
+                        // User is already logged in, redirect to main page
+                        window.location.href = '/';
+                    }
+                }
+            } catch (error) {
+                console.log('User not logged in');
+            }
+        });
+
+        // Add some interactive effects
+        document.addEventListener('mousemove', (e) => {
+            const container = document.querySelector('.login-container');
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            
+            container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            const container = document.querySelector('.login-container');
+            container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
+</body>
+</html>

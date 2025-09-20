@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payment Success | DonutSMP Store</title>
+    <meta name="description" content="Payment successful! Check Discord for your ticket.">
+    <meta name="theme-color" content="#036fff">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            background: transparent;
+            color: #fff;
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        #background-image {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: url('https://donutmarket.store/static/store.png') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(4px) brightness(0.4);
+        }
+
+        #background-overlay {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(24, 26, 27, 0.7) 0%, rgba(24, 26, 27, 0.5) 50%, rgba(24, 26, 27, 0.8) 100%);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .success-container {
+            background: rgba(35, 39, 43, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(3, 111, 255, 0.3);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.6s ease;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #48bb78;
+            margin-bottom: 1.5rem;
+            animation: bounce 1s ease;
+        }
+
+        .success-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: #48bb78;
+            text-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+        }
+
+        .user-info {
+            background: rgba(24, 26, 27, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #b0b0b0;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .items-section {
+            background: rgba(24, 26, 27, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .items-title {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item-list li {
+            color: #8ecfff;
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .discord-notice {
+            background: linear-gradient(135deg, #5865F2, #4752C4);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            color: #fff;
+        }
+
+        .discord-notice h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .discord-notice p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-discord {
+            background: #5865F2;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn-discord:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(88, 101, 242, 0.6);
+        }
+
+        .btn-store {
+            background: #036fff;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(3, 111, 255, 0.4);
+        }
+
+        .btn-store:hover {
+            background: #005be6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(3, 111, 255, 0.6);
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 600px) {
+            .content-wrapper {
+                padding: 1rem;
+            }
+
+            .success-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .success-title {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="background-image"></div>
+    <div id="background-overlay"></div>
+
+    <div class="content-wrapper">
+        <div class="success-container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h1 class="success-title">Payment Successful!</h1>
+            
+            <div class="user-info">
+                <div class="info-row">
+                    <span class="info-label">Username:</span>
+                    <span class="info-value" id="username">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Items:</span>
+                    <span class="info-value" id="item-count">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Amount Paid:</span>
+                    <span class="info-value" id="amount-paid">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Transaction ID:</span>
+                    <span class="info-value" id="transaction-id">Loading...</span>
+                </div>
+            </div>
+
+            <div class="items-section">
+                <div class="items-title">
+                    <i class="fas fa-box"></i>
+                    Items purchased:
+                </div>
+                <ul class="item-list" id="purchased-items">
+                    <li><i class="fas fa-coins"></i> Loading...</li>
+                </ul>
+            </div>
+
+            <div class="discord-notice">
+                <h3><i class="fab fa-discord"></i> Check Discord for your ticket!</h3>
+                <p>A support ticket has been created in our Discord server. Please join and check your ticket for item delivery.</p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="https://discord.gg/NbkgPrqpKT" class="btn btn-discord" target="_blank">
+                    <i class="fab fa-discord"></i>
+                    Join Discord
+                </a>
+                <a href="replica.html" class="btn btn-store">
+                    <i class="fas fa-store"></i>
+                    Back to Store
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        function loadOrderDetails() {
+            // Get URL parameters
+            const sessionId = getUrlParameter('session_id');
+            const orderId = getUrlParameter('order_id');
+            
+            // Get order details from localStorage or URL params
+            const orderData = JSON.parse(localStorage.getItem('orderData') || '{}');
+            const userData = JSON.parse(localStorage.getItem('discord_user') || '{}');
+            
+            // Populate the page with order details
+            document.getElementById('username').textContent = userData.username || 'Unknown User';
+            document.getElementById('item-count').textContent = `${orderData.totalItems || 1} items`;
+            document.getElementById('amount-paid').textContent = `$${orderData.totalAmount || '0.00'}`;
+            document.getElementById('transaction-id').textContent = sessionId || orderId || 'DEMO_TRANSACTION_123';
+            
+            // Populate items list
+            const itemsList = document.getElementById('purchased-items');
+            if (orderData.items && orderData.items.length > 0) {
+                itemsList.innerHTML = '';
+                orderData.items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-coins"></i> ${item.amount} ${item.name}`;
+                    itemsList.appendChild(li);
+                });
+            } else {
+                itemsList.innerHTML = '<li><i class="fas fa-coins"></i> Demo Purchase - DonutSMP Money</li>';
+            }
+            
+            // Clear order data from localStorage after displaying
+            localStorage.removeItem('orderData');
+        }
+
+        // Load order details when page loads
+        document.addEventListener('DOMContentLoaded', loadOrderDetails);
+
+        // Add some confetti effect
+        function createConfetti() {
+            const colors = ['#036fff', '#48bb78', '#FFD700', '#ff6b6b', '#8ecfff'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: 8px;
+                        height: 8px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        top: -10px;
+                        left: ${Math.random() * 100}vw;
+                        z-index: 1000;
+                        border-radius: 50%;
+                        pointer-events: none;
+                        animation: confetti-fall ${2 + Math.random() * 3}s linear forwards;
+                    `;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 100);
+            }
+        }
+
+        // Add confetti animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confetti-fall {
+                0% {
+                    transform: translateY(-10px) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Start confetti when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(createConfetti, 500);
+        });
+    </script>
+</body>
+</html>

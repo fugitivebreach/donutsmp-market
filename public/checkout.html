@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout - DonutMarket | Secure Payment</title>
+    <meta name="description" content="Complete your DonutSMP purchase securely. Review your order and proceed with payment.">
+    <meta name="theme-color" content="#036fff">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            height: auto !important;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        body {
+            background: transparent;
+            color: #fff;
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #background-image {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: url('https://donutmarket.store/static/store.png') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(4px) brightness(0.4);
+        }
+
+        #background-overlay {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(24, 26, 27, 0.7) 0%, rgba(24, 26, 27, 0.5) 50%, rgba(24, 26, 27, 0.8) 100%);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header img {
+            width: 80px;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .checkout-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        .order-summary {
+            background: rgba(35, 39, 43, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(3, 111, 255, 0.3);
+            border-radius: 18px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            height: fit-content;
+        }
+
+        .payment-section {
+            background: rgba(35, 39, 43, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(3, 111, 255, 0.3);
+            border-radius: 18px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(24, 26, 27, 0.8);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-name {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .item-description {
+            color: #8ecfff;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .item-price {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .order-total {
+            border-top: 2px solid rgba(3, 111, 255, 0.3);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-label {
+            color: #b0b0b0;
+            font-weight: 600;
+        }
+
+        .total-value {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .grand-total {
+            font-size: 1.3rem;
+            color: #48bb78;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .user-info {
+            background: rgba(24, 26, 27, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-info h3 {
+            margin: 0 0 1rem 0;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .user-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-detail:last-child {
+            margin-bottom: 0;
+        }
+
+        .payment-notice {
+            background: linear-gradient(135deg, #036fff, #005be6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .payment-notice h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .payment-notice p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .place-order-btn {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 1rem 2rem;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(72, 187, 120, 0.4);
+            margin-bottom: 1rem;
+        }
+
+        .place-order-btn:hover {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(72, 187, 120, 0.6);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #b0b0b0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .content-wrapper {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .order-summary,
+            .payment-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="background-image"></div>
+    <div id="background-overlay"></div>
+
+    <div class="content-wrapper">
+        <div class="header">
+            <img src="https://donutmarket.store/static/logo1.png" alt="DonutMarket Logo">
+            <h1>Secure Checkout</h1>
+            <p>Review your order and complete your purchase</p>
+        </div>
+
+        <div class="checkout-container">
+            <div class="payment-section">
+                <div class="section-title">
+                    <i class="fas fa-user"></i>
+                    Account Information
+                </div>
+
+                <div class="user-info">
+                    <h3>Logged in as:</h3>
+                    <div class="user-detail">
+                        <span>Discord:</span>
+                        <span id="user-discord">Loading...</span>
+                    </div>
+                    <div class="user-detail">
+                        <span>User ID:</span>
+                        <span id="user-id">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="payment-notice">
+                    <h3><i class="fas fa-ticket-alt"></i> Ticket-Based Delivery</h3>
+                    <p>Instead of payment processing, we'll create a Discord support ticket for your order. Our team will handle delivery manually through the ticket system.</p>
+                </div>
+
+                <button class="place-order-btn" onclick="placeOrder()">
+                    <i class="fas fa-ticket-alt"></i>
+                    Create Support Ticket
+                </button>
+
+                <a href="replica.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Store
+                </a>
+
+                <div class="security-badges">
+                    <div class="security-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        Secure
+                    </div>
+                    <div class="security-badge">
+                        <i class="fab fa-discord"></i>
+                        Discord Verified
+                    </div>
+                    <div class="security-badge">
+                        <i class="fas fa-lock"></i>
+                        Encrypted
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <div class="section-title">
+                    <i class="fas fa-receipt"></i>
+                    Order Summary
+                </div>
+
+                <div id="order-items">
+                    <!-- Order items will be populated here -->
+                </div>
+
+                <div class="order-total">
+                    <div class="total-row">
+                        <span class="total-label">Subtotal:</span>
+                        <span class="total-value" id="subtotal">$0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">Processing Fee:</span>
+                        <span class="total-value">$0.00</span>
+                    </div>
+                    <div class="total-row grand-total">
+                        <span class="total-label">Total:</span>
+                        <span class="total-value" id="total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadCheckoutData() {
+            // Load user data from session
+            try {
+                const response = await fetch('/api/user');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.user) {
+                        document.getElementById('user-discord').textContent = data.user.username;
+                        document.getElementById('user-id').textContent = data.user.id;
+                    } else {
+                        document.getElementById('user-discord').textContent = 'Not logged in';
+                        document.getElementById('user-id').textContent = 'Unknown';
+                    }
+                } else {
+                    document.getElementById('user-discord').textContent = 'Not logged in';
+                    document.getElementById('user-id').textContent = 'Unknown';
+                }
+            } catch (error) {
+                document.getElementById('user-discord').textContent = 'Not logged in';
+                document.getElementById('user-id').textContent = 'Unknown';
+            }
+
+            // Load cart data from sessionStorage (from stores.html)
+            let cart = JSON.parse(sessionStorage.getItem('cart') || localStorage.getItem('cart') || '[]');
+            let storeConfig = JSON.parse(sessionStorage.getItem('storeConfig') || '{}');
+            const orderItemsContainer = document.getElementById('order-items');
+            
+            if (cart.length === 0) {
+                // Demo data if no cart
+                const demoItem = {
+                    name: 'DonutSMP Money',
+                    amount: '12M',
+                    price: 1.92,
+                    currency: 'USD',
+                    store: 'DonutMarket'
+                };
+                cart.push(demoItem);
+            }
+
+            let subtotal = 0;
+            orderItemsContainer.innerHTML = '';
+
+            // Group items by currency for proper totaling
+            const currencyGroups = {};
+            
+            cart.forEach(item => {
+                const currency = item.currency || 'USD';
+                if (!currencyGroups[currency]) {
+                    currencyGroups[currency] = { items: [], total: 0 };
+                }
+                currencyGroups[currency].items.push(item);
+                currencyGroups[currency].total += item.price;
+                
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-amount">${item.amount}${item.store ? ` • ${item.store}` : ''}</div>
+                    </div>
+                    <div class="item-price">${currency} ${item.price.toFixed(2)}</div>
+                `;
+                orderItemsContainer.appendChild(orderItem);
+            });
+            
+            // Calculate subtotal (assuming all items use the same currency for now)
+            const primaryCurrency = Object.keys(currencyGroups)[0] || 'USD';
+            subtotal = currencyGroups[primaryCurrency]?.total || 0;
+
+            document.getElementById('subtotal').textContent = `${primaryCurrency} ${subtotal.toFixed(2)}`;
+            document.getElementById('total').textContent = `${primaryCurrency} ${subtotal.toFixed(2)}`;
+
+            // Update page title based on store
+            if (storeConfig.storeName) {
+                document.title = `Checkout - ${storeConfig.storeName} | Secure Payment`;
+                const headerTitle = document.querySelector('h1');
+                if (headerTitle) {
+                    headerTitle.textContent = `${storeConfig.storeName} Checkout`;
+                }
+            }
+
+            // Store order data for success page
+            localStorage.setItem('orderData', JSON.stringify({
+                items: cart,
+                totalAmount: subtotal.toFixed(2),
+                totalItems: cart.length,
+                currency: primaryCurrency,
+                storeName: storeConfig.storeName || 'DonutMarket'
+            }));
+        }
+
+        async function placeOrder() {
+            // Check if user is logged in
+            try {
+                const userResponse = await fetch('/api/user');
+                if (!userResponse.ok) {
+                    alert('Please log in with Discord first!');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                const userData = await userResponse.json();
+                if (!userData.success || !userData.user) {
+                    alert('Please log in with Discord first!');
+                    window.location.href = 'login.html';
+                    return;
+                }
+            } catch (error) {
+                alert('Please log in with Discord first!');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Show loading state
+            const btn = document.querySelector('.place-order-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Ticket...';
+            btn.disabled = true;
+
+            // Get order data
+            const orderData = JSON.parse(localStorage.getItem('orderData') || '{}');
+            
+            // Create ticket immediately
+            setTimeout(async () => {
+                // Generate transaction ID
+                const transactionId = 'TICKET_' + Date.now();
+                
+                // Get fresh user data and create ticket data
+                const userResponse = await fetch('/api/user');
+                const currentUser = await userResponse.json();
+                
+                const ticketData = {
+                    buyer: currentUser.user.username,
+                    discord: currentUser.user.username,
+                    transactionId: transactionId,
+                    totalAmount: orderData.totalAmount,
+                    items: orderData.items
+                };
+
+                // Send to backend
+                fetch('/api/create-ticket', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(ticketData)
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Clear cart from both storage locations and redirect to success page
+                        localStorage.removeItem('cart');
+                        sessionStorage.removeItem('cart');
+                        sessionStorage.removeItem('storeConfig');
+                        window.location.href = `success.html?order_id=${transactionId}`;
+                    } else {
+                        throw new Error(data.error || 'Failed to create ticket');
+                    }
+                }).catch(error => {
+                    console.error('Error creating ticket:', error);
+                    // Still redirect to success page but show warning
+                    localStorage.removeItem('cart');
+                    sessionStorage.removeItem('cart');
+                    sessionStorage.removeItem('storeConfig');
+                    window.location.href = `success.html?order_id=${transactionId}&warning=ticket_failed`;
+                });
+            }, 2000);
+        }
+
+        // Check if user is logged in
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/user');
+                if (!response.ok) {
+                    if (confirm('You need to log in with Discord to proceed. Redirect to login page?')) {
+                        window.location.href = 'login.html';
+                    }
+                    return;
+                }
+                
+                const data = await response.json();
+                if (!data.success || !data.user) {
+                    if (confirm('You need to log in with Discord to proceed. Redirect to login page?')) {
+                        window.location.href = 'login.html';
+                    }
+                }
+            } catch (error) {
+                if (confirm('You need to log in with Discord to proceed. Redirect to login page?')) {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadCheckoutData();
+        });
+    </script>
+</body>
+</html>

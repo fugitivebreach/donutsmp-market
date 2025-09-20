@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DonutSMP IRL Market, Dupe, Shop & Trading | Buy DonutSMP Coins, Items & Bases | #1 Donut SMP Store</title>
+    <meta name="description" content="🛒 #1 DonutSMP Store - Buy DonutSMP coins, items, bases, PvP kits, netherite, elytra & spawners with INSTANT delivery! ⚡ Fast, secure, trusted by 1000+ players. Best prices guaranteed. Join DonutSMP IRL market today!">
+    <meta name="theme-color" content="#036fff">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            height: auto !important;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        body {
+            background: transparent;
+            color: #fff;
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #background-image {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: url('https://donutmarket.store/static/store.png') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(4px) brightness(0.4);
+            will-change: auto;
+            contain: layout style paint;
+        }
+
+        #background-overlay {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(24, 26, 27, 0.7) 0%, rgba(24, 26, 27, 0.5) 50%, rgba(24, 26, 27, 0.8) 100%);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0 10px 0;
+        }
+        .header img {
+            width: 120px;
+            border-radius: 20px;
+        }
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin: 10px 0 0 0;
+            letter-spacing: 2px;
+        }
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.2rem;
+            margin: 8px 0 0 0;
+        }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 32px;
+            margin: 40px auto 0 auto;
+            max-width: 1100px;
+        }
+        .product-card {
+            background: rgba(35, 39, 43, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(3, 111, 255, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            padding: 32px 28px 28px 28px;
+            text-align: center;
+            width: 220px;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 8px 32px rgba(3, 111, 255, 0.5);
+            border-color: rgba(3, 111, 255, 0.4);
+        }
+        .product-icon {
+            font-size: 3.2rem;
+            color: #036fff;
+            margin-bottom: 18px;
+        }
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .product-price {
+            font-size: 1.1rem;
+            color: #8ecfff;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .buy-btn {
+            background: #036fff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            padding: 12px 0;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .buy-btn:hover {
+            background: #005be6;
+        }
+        .custom-amount-card {
+            background: rgba(42, 45, 49, 0.9);
+            border: 3px solid #036fff;
+        }
+        .custom-amount-input {
+            width: 80px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #036fff;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            text-align: center;
+            background: rgba(24, 26, 27, 0.8);
+            color: #fff;
+        }
+
+        .sorter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .sorter-tab {
+            background: rgba(35, 39, 43, 0.95);
+            color: #8ecfff;
+            border: 2px solid #036fff;
+            border-radius: 12px 12px 0 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+            padding: 12px 36px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(3, 111, 255, 0.08);
+            letter-spacing: 1px;
+            width: 120px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sorter-tab:hover {
+            background: #036fff;
+            color: #fff;
+            border-color: #8ecfff;
+        }
+        .sorter-tab.active {
+            background: #036fff;
+            color: #fff;
+            border-bottom: 2px solid #1e2124;
+            z-index: 2;
+        }
+
+        .instant-delivery-badge {
+            background: linear-gradient(90deg, #FFD700 60%, #fffbe6 100%);
+            color: #b8860b;
+            font-weight: 900;
+            font-size: 0.78rem;
+            border-radius: 8px;
+            padding: 2px 10px;
+            margin-left: 8px;
+            box-shadow: 0 2px 8px #FFD70044;
+            border: 1.5px solid #FFD700;
+            animation: badge-pop 1.2s cubic-bezier(.68,-0.55,.27,1.55) 1, badge-pulse 1.5s infinite alternate;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes badge-pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes badge-pulse {
+            0% { box-shadow: 0 0 8px #FFD70044, 0 0 0 #FFD70000; }
+            100% { box-shadow: 0 0 16px #FFD70088, 0 0 8px #FFD70033; }
+        }
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            z-index: 10;
+            font-size: 0.58rem;
+            padding: 1.5px 7px;
+            box-shadow: 0 2px 8px #FFD70055, 0 1px 4px #FFD70033;
+            border-radius: 8px;
+            animation: badge-pop 1.2s cubic-bezier(.68,-0.55,.27,1.55) 1, badge-pulse 1.5s infinite alternate;
+        }
+
+        #animated-product {
+            position: relative;
+            display: inline-block;
+            min-width: 80px;
+            text-align: left;
+        }
+
+        #animated-product::after {
+            content: '';
+            position: absolute;
+            left: var(--cursor-left, 0);
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: #036fff;
+            animation: blink 1s infinite;
+            transition: left 0.05s ease;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes vouch-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .vouches-marquee-group:hover .vouches-marquee {
+            animation-play-state: paused;
+        }
+        .vouch-card.glass-morphism:hover {
+            transform: scale(1.03);
+            box-shadow:0 8px 32px rgba(3,111,255,0.28);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .modal-bg {
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="background-image"></div>
+    <div id="background-overlay"></div>
+
+    <div class="content-wrapper" id="main-content">
+        <div class="header" style="position:relative;">
+            <img src="https://donutmarket.store/static/logo1.png" alt="DonutMarket Logo">
+            <h1>DonutMarket</h1>
+            <p style="color:#e0eaff;">The #1 DonutSMP Market for purchasing <span id="animated-product" style="color: #036fff; font-weight: 600;">Money</span></p>
+
+            <div style="position:absolute;top:20px;left:30px;display:flex;gap:10px;flex-direction:column;align-items:flex-start;">
+                <a href="#" onclick="showReferralModal()" style="background:#4caf50;color:#fff;border:none;border-radius:8px;padding:10px;width:35px;height:35px;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(76,175,80,0.15);transition:all 0.2s;">
+                    <i class="fas fa-gift" style="font-size:1.2rem;"></i>
+                </a>
+            </div>
+
+            <div style="position:absolute;top:20px;right:30px;display:flex;gap:8px;align-items:center;">
+                <a href="#stores" style="background:linear-gradient(135deg, #ffd700, #ffed4e);color:#000;border:none;border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 4px 16px rgba(255,215,0,0.3);transition:all 0.2s;position:relative;cursor:pointer;font-weight:600;font-size:0.9rem;">
+                    <i class="fas fa-search-dollar" style="font-size:1.1rem;"></i>
+                    <span>Want to explore cheaper options? <span style="color:#000;text-decoration:underline;font-weight:700;">Visit all stores</span></span>
+                </a>
+
+                <button id="cart-icon" style="background:#036fff;color:#fff;border:none;border-radius:12px;padding:12px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 16px rgba(3,111,255,0.3);transition:all 0.2s;position:relative;cursor:pointer;">
+                    <i class="fas fa-shopping-cart" style="font-size:1.3rem;"></i>
+                    <span class="cart-count" id="cart-count" style="position:absolute;top:-6px;right:-6px;background:#dc3545;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;">0</span>
+                </button>
+
+                <a href="login.html" id="login-btn" style="background:#036fff;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:0.9rem;font-weight:700;display:flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 2px 8px rgba(3,111,255,0.15);transition:background 0.2s;">
+                    <i class="fas fa-user" style="font-size:1.1rem;"></i> <span id="login-text">Login</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="sorter-tabs">
+            <div style="position:relative;display:inline-block;">
+                <button class="sorter-tab active" data-category="coins">
+                    <img src="https://donutmarket.store/static/logo1.png" alt="Coins" style="height:32px;vertical-align:middle;">
+                </button>
+                <span class="instant-delivery-badge notification-badge">Instant Delivery!</span>
+            </div>
+            <button class="sorter-tab" data-category="items" style="display: flex; align-items: center; justify-content: center; gap: 2px; padding: 8px 12px;">
+                <img src="https://donutmarket.store/static/spawner.png" alt="Spawner" style="height:28px;width:28px;object-fit:contain;">
+                <img src="https://donutmarket.store/static/elytra.png" alt="Elytra" style="height:28px;width:28px;object-fit:contain;">
+            </button>
+            <button class="sorter-tab" data-category="bases">
+                <img src="https://donutmarket.store/static/Chest.png" alt="Bases" style="height:32px;vertical-align:middle;">
+            </button>
+            <button class="sorter-tab" data-category="armor">
+                <img src="https://donutmarket.store/static/netheritehelmet.gif" alt="Armor/Kits" style="height:32px;vertical-align:middle;">
+            </button>
+            <button class="sorter-tab" data-category="raffle">
+                <span style="font-size:28px;vertical-align:middle;">🎰</span>
+            </button>
+        </div>
+
+        <div class="products" data-price-per-million="0.16">
+            <div class="product-card custom-amount-card" style="position:relative;">
+                <span class="instant-delivery-badge" style="position: absolute; top: 8px; right: 8px; background: linear-gradient(45deg, #00ff88, #00cc6a); color: #000; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3); z-index: 10;">
+                    <i class="fas fa-bolt"></i> Instant
+                </span>
+                <div class="product-icon"><i class="fa-solid fa-coins"></i></div>
+                <div class="product-title">DonutSMP Money</div>
+                <input type="number" class="custom-amount-input" id="custom-coins" min="12" max="1000" placeholder="Millions" value="12">
+                <div class="product-price" id="customPrice">$1.92</div>
+                <button class="buy-btn" type="button" style="background:#036fff;" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </div>
+
+        <div id="how-it-works" style="padding:3rem 0;margin:1rem 0;">
+            <div style="max-width:1200px;margin:0 auto;padding:0 1rem;">
+                <div style="max-width:600px;margin:0 auto;text-align:center;">
+                    <h2 style="color:#fff;font-size:2.5rem;font-weight:900;margin-bottom:1rem;text-align:center;">How does it work?</h2>
+                    <p style="color:#b0b0b0;font-size:1.1rem;line-height:1.6;margin-bottom:3rem;text-align:center;">
+                        Shopping made simple in three easy steps!
+                    </p>
+                </div>
+
+                <div style="position:relative;margin-top:3rem;">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:2rem;text-align:center;">
+                        <div>
+                            <div style="display:flex;align-items:center;justify-content:center;width:64px;height:64px;margin:0 auto;background:#036fff;border:2px solid #036fff;border-radius:50%;box-shadow:0 4px 20px rgba(3,111,255,0.3);">
+                                <span style="color:#fff;font-size:1.5rem;font-weight:700;">1</span>
+                            </div>
+                            <h3 style="margin-top:1.5rem;color:#fff;font-size:1.5rem;font-weight:700;margin-bottom:1rem;">Select a product</h3>
+                            <p style="color:#b0b0b0;font-size:1rem;line-height:1.6;">
+                                Browse our wide selection of DonutSMP items including coins, spawners, elytra, bases, and netherite gear. Simply click on the item you want to add it to your cart. Whether you need money for trading, spawners for your base, or the best PvP gear, we've got you covered.
+                            </p>
+                        </div>
+
+                        <div>
+                            <div style="display:flex;align-items:center;justify-content:center;width:64px;height:64px;margin:0 auto;background:#036fff;border:2px solid #036fff;border-radius:50%;box-shadow:0 4px 20px rgba(3,111,255,0.3);">
+                                <span style="color:#fff;font-size:1.5rem;font-weight:700;">2</span>
+                            </div>
+                            <h3 style="margin-top:1.5rem;color:#fff;font-size:1.5rem;font-weight:700;margin-bottom:1rem;">Complete payment</h3>
+                            <p style="color:#b0b0b0;font-size:1rem;line-height:1.6;">
+                                Proceed to checkout where you can review your selected items and total cost. Choose from our secure payment options to finalize your order. Our payment gateway ensures your transaction is protected, giving you peace of mind. Enter your information and confirm your purchase.
+                            </p>
+                        </div>
+
+                        <div>
+                            <div style="display:flex;align-items:center;justify-content:center;width:64px;height:64px;margin:0 auto;background:#036fff;border:2px solid #036fff;border-radius:50%;box-shadow:0 4px 20px rgba(3,111,255,0.3);">
+                                <span style="color:#fff;font-size:1.5rem;font-weight:700;">3</span>
+                            </div>
+                            <h3 style="margin-top:1.5rem;color:#fff;font-size:1.5rem;font-weight:700;margin-bottom:1rem;">Receive instantly</h3>
+                            <p style="color:#b0b0b0;font-size:1rem;line-height:1.6;">
+                                Once your payment is confirmed, our automated system will deliver your items instantly! For coins, our bots will automatically pay you in-game. For other items, a support ticket will be created in our Discord server where our team will assist you. Join our Discord before ordering for seamless delivery!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="vouches-marquee-group" style="overflow:hidden;padding:2rem 0;margin-top:1rem;">
+            <div style="text-align:center;margin-bottom:18px;">
+                <h2 style="color:#fff;font-size:1.7rem;font-weight:900;letter-spacing:1px;">
+                    <i class="fas fa-star"></i> Customer Reviews & Vouches
+                </h2>
+                <p style="color:#b0b0b0;font-size:1rem;margin-top:8px;">See what our customers say about us!</p>
+            </div>
+
+            <div class="vouches-marquee" style="display:flex;gap:1.5rem;animation:vouch-marquee 40s linear infinite;will-change:transform;align-items:center;">
+                <div class="vouch-card glass-morphism" style="position:relative;flex:0 0 auto;height:180px;width:320px;background:rgba(35,39,43,0.9);backdrop-filter:blur(10px);box-shadow:0 4px 24px rgba(3,111,255,0.18);border-radius:1rem;border:1px solid rgba(255,255,255,0.05);padding:2rem;transition:all 0.3s ease;overflow:hidden;">
+                    <p style="color:#fff;line-height:1.6;font-size:1rem;font-weight:500;text-align:center;margin:0;">Loading vouches from Discord...</p>
+                </div>
+            </div>
+
+            <div style="text-align:center;margin-top:18px;">
+                <span style="color:#8ecfff;font-size:1.25rem;font-weight:900;text-shadow:0 2px 8px #23272b, 0 0 4px #036fff;letter-spacing:0.5px;">Check our discord to see all of our vouches!</span>
+            </div>
+            <div style="text-align:center;margin-top:10px;font-size:0.85rem;color:#b0b0b0;font-style:italic;">
+                * By purchasing you agree to the <a href="policy.html" style="color:#8ecfff;text-decoration:underline;">policy</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal-bg" style="display:none;position:fixed;z-index:1000;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;">
+        <div class="modal" style="background:rgba(35,39,43,0.95);backdrop-filter:blur(15px);border:1px solid rgba(3,111,255,0.3);border-radius:18px;padding:32px 28px;box-shadow:0 8px 32px rgba(0,0,0,0.8);min-width:320px;max-width:95vw;text-align:center;position:relative;">
+            <button class="close-btn" onclick="closeLoginModal()" style="background:none;border:none;color:#aaa;font-size:1.5rem;position:absolute;top:18px;right:24px;cursor:pointer;">×</button>
+            
+            <div style="text-align:center;margin-bottom:2rem;">
+                <i class="fas fa-lock" style="font-size:3rem;color:#036fff;margin-bottom:1rem;"></i>
+                <h2 style="color:#fff;font-size:1.8rem;font-weight:900;margin-bottom:1rem;">Login Required</h2>
+                <h3 style="color:#8ecfff;font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;">Authentication Required</h3>
+                <p style="color:#b0b0b0;font-size:1rem;line-height:1.6;margin-bottom:2rem;">You must be logged in with Discord to make purchases. This allows you to create support tickets and ensures you receive your items properly.</p>
+            </div>
+            
+            <div style="background:rgba(24,26,27,0.8);border-radius:12px;padding:1.5rem;margin-bottom:2rem;">
+                <h4 style="color:#fff;font-size:1.1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:8px;"><i class="fas fa-question-circle" style="color:#036fff;"></i> Why Login?</h4>
+                <ul style="color:#b0b0b0;font-size:0.9rem;line-height:1.6;text-align:left;margin:0;padding-left:1.5rem;">
+                    <li>Secure payment processing</li>
+                    <li>Order tracking and history</li>
+                    <li>Referral system access</li>
+                    <li>24/7 Discord support</li>
+                </ul>
+            </div>
+            
+            <button onclick="loginWithDiscord()" style="background:#5865F2;color:#fff;border:none;border-radius:12px;font-size:1.2rem;font-weight:800;padding:15px 30px;text-decoration:none;display:inline-block;margin-bottom:1rem;transition:all 0.2s;box-shadow:0 4px 20px rgba(88,101,242,0.3);cursor:pointer;width:100%;">
+                <i class="fab fa-discord" style="margin-right:8px;"></i>
+                Login with Discord
+            </button>
+            
+            <p style="color:#888;font-size:0.8rem;margin-top:1rem;">Secure OAuth2 authentication via Discord</p>
+        </div>
+    </div>
+    
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal-bg" style="display:none;position:fixed;z-index:1000;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;">
+        <div class="modal" style="background:rgba(35,39,43,0.95);backdrop-filter:blur(15px);border:1px solid rgba(3,111,255,0.3);border-radius:18px;padding:32px 28px;box-shadow:0 8px 32px rgba(0,0,0,0.8);min-width:400px;max-width:95vw;text-align:center;position:relative;">
+            <button class="close-btn" onclick="closeCartModal()" style="background:none;border:none;color:#aaa;font-size:1.5rem;position:absolute;top:18px;right:24px;cursor:pointer;">×</button>
+            
+            <h2 style="color:#fff;font-size:1.8rem;font-weight:900;margin-bottom:1.5rem;">
+                <i class="fas fa-shopping-cart" style="color:#036fff;margin-right:8px;"></i>Shopping Cart
+            </h2>
+            
+            <div id="cart-items" style="margin-bottom:2rem;">
+                <!-- Cart items will be populated here -->
+            </div>
+            
+            <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:1rem;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:1rem;">
+                    <span style="color:#b0b0b0;">Total:</span>
+                    <span id="cart-total" style="color:#fff;font-weight:700;font-size:1.2rem;">$0.00</span>
+                </div>
+                <button onclick="proceedToCheckout()" style="background:#036fff;color:#fff;border:none;border-radius:12px;font-size:1.1rem;font-weight:800;padding:12px 24px;width:100%;cursor:pointer;transition:background 0.2s;">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let isLoggedIn = false;
+        let cart = [];
+        let userInfo = null;
+        let currentCategory = 'coins';
+
+        // Product data for all categories
+        const productData = {
+            coins: {
+                name: 'DonutSMP Money',
+                description: 'In-game currency for DonutSMP server',
+                basePrice: 0.16, // per million
+                defaultAmount: 12,
+                unit: 'M',
+                minAmount: 12,
+                maxAmount: 1000
+            },
+            spawners: {
+                name: 'Mob Spawners',
+                description: 'High-quality mob spawners for your base',
+                items: [
+                    { name: 'Skeleton Spawner', price: 0.10, description: 'Bone and arrow farm' },
+                ]
+            },
+            elytra: {
+                name: 'Elytra & Wings',
+                description: 'Flight items and accessories',
+                items: [
+                    { name: 'Elytra', price: 20, description: 'Elytra for flying, or finding bases' },
+                ]
+            },
+            bases: {
+                name: 'Bases & Builds',
+                description: 'Pre-built bases and structures',
+                items: [
+                    { name: 'Starter Base', price: 25.00, description: 'Small furnished base with essentials' },
+                    { name: 'Medium Base', price: 45.00, description: 'Mid-tier base with farms' },
+                    { name: 'Mega Base', price: 85.00, description: 'Large base with advanced systems' },
+                ]
+            },
+            armor: {
+                name: 'Armor & Weapons',
+                description: 'Combat gear and protection',
+                items: [
+                    { name: 'Netherite Armor Set', price: 28.00, description: 'Full Protection IV set' },
+                    { name: 'Diamond Armor Set', price: 15.00, description: 'Full Protection IV set' },
+                    { name: 'Netherite Sword (Sharpness V)', price: 12.00, description: 'Ultimate weapon' },
+                    { name: 'Bow (Power V, Infinity)', price: 8.00, description: 'Powerful ranged weapon' },
+                    { name: 'Crossbow (Quick Charge III)', price: 6.00, description: 'Fast-loading crossbow' },
+                    { name: 'Trident (Loyalty III)', price: 20.00, description: 'Rare ocean weapon' }
+                ]
+            },
+            raffle: {
+                name: 'Raffle Tickets',
+                description: 'Enter raffles for rare items',
+                items: [
+                    { name: 'Weekly Raffle Ticket', price: 5.00, description: 'Enter this week\'s raffle' },
+                    { name: 'Monthly Mega Raffle', price: 15.00, description: 'Big prizes monthly raffle' },
+                    { name: 'Rare Item Raffle', price: 10.00, description: 'Chance for exclusive items' },
+                    { name: 'Builder\'s Raffle', price: 8.00, description: 'Building materials and tools' }
+                ]
+            }
+        };
+        
+        function initAnimatedProductText() {
+            const products = ['Money', 'Spawners', 'Elytras', 'Bases', 'Netherite Gear'];
+            const animatedElement = document.getElementById('animated-product');
+            let currentIndex = 0;
+
+            function animateText() {
+                const currentProduct = products[currentIndex];
+                const nextIndex = (currentIndex + 1) % products.length;
+                const nextProduct = products[nextIndex];
+
+                deleteText(currentProduct, () => {
+                    typeText(nextProduct, () => {
+                        currentIndex = nextIndex;
+                        setTimeout(animateText, 2000);
+                    });
+                });
+            }
+
+            function deleteText(text, callback) {
+                let currentLength = text.length;
+                const deleteInterval = setInterval(() => {
+                    if (currentLength > 0) {
+                        animatedElement.textContent = text.substring(0, currentLength - 1);
+                        currentLength--;
+                        setTimeout(() => updateCursorPosition(currentLength), 0);
+                    } else {
+                        clearInterval(deleteInterval);
+                        setTimeout(callback, 300);
+                    }
+                }, 100);
+            }
+
+            function typeText(text, callback) {
+                let currentLength = 0;
+                const typeInterval = setInterval(() => {
+                    if (currentLength < text.length) {
+                        animatedElement.textContent = text.substring(0, currentLength + 1);
+                        currentLength++;
+                        setTimeout(() => updateCursorPosition(currentLength), 0);
+                    } else {
+                        clearInterval(typeInterval);
+                        setTimeout(callback, 500);
+                    }
+                }, 100);
+            }
+
+            function updateCursorPosition(textLength) {
+                const tempSpan = document.createElement('span');
+                tempSpan.style.cssText = `
+                    position: absolute;
+                    visibility: hidden;
+                    white-space: pre;
+                    font-family: inherit;
+                    font-size: inherit;
+                    font-weight: inherit;
+                    color: #036fff;
+                    font-weight: 600;
+                    display: inline-block;
+                `;
+                tempSpan.textContent = animatedElement.textContent;
+                document.body.appendChild(tempSpan);
+
+                const textWidth = tempSpan.offsetWidth;
+                document.body.removeChild(tempSpan);
+
+                let offset = 8;
+                if (animatedElement.textContent === 'Spawners') {
+                    offset = 12;
+                } else if (animatedElement.textContent === 'Netherite Gear') {
+                    offset = 20;
+                }
+
+                animatedElement.style.setProperty('--cursor-left', `${textWidth + offset}px`);
+            }
+
+            updateCursorPosition(5);
+            setTimeout(animateText, 3000);
+        }
+
+        function showReferralModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-bg active';
+            modal.style.cssText = `
+                display: flex;
+                position: fixed;
+                z-index: 1000;
+                left: 0; top: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.7);
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease;
+            `;
+
+            modal.innerHTML = `
+                <div class="modal" style="
+                    background: rgba(35, 39, 43, 0.95);
+                    backdrop-filter: blur(15px);
+                    border: 1px solid rgba(3, 111, 255, 0.3);
+                    border-radius: 18px;
+                    padding: 32px 28px;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+                    min-width: 320px;
+                    max-width: 95vw;
+                    text-align: center;
+                    animation: slideIn 0.3s ease;
+                ">
+                    <button class="close-btn" onclick="this.parentElement.parentElement.remove()" style="
+                        background: none;
+                        border: none;
+                        color: #aaa;
+                        font-size: 1.5rem;
+                        position: absolute;
+                        top: 18px;
+                        right: 24px;
+                        cursor: pointer;
+                    ">×</button>
+
+                    <h2 style="color: #fff; font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">
+                        🎁 Get Free Coins!
+                    </h2>
+
+                    <p style="color: #b0b0b0; font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+                        Join our Discord server and get <strong style="color: #FFD700;">200K free coins</strong> instantly!
+                        Plus, earn rewards for every friend you bring to DonutMarket.
+                    </p>
+
+                    <a href="https://discord.gg/NbkgPrqpKT" target="_blank" style="
+                        background: #5865F2;
+                        color: #fff;
+                        border: none;
+                        border-radius: 12px;
+                        font-size: 1.2rem;
+                        font-weight: 800;
+                        padding: 15px 30px;
+                        text-decoration: none;
+                        display: inline-block;
+                        margin-bottom: 1rem;
+                        transition: all 0.2s;
+                        box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-discord" style="margin-right: 8px;"></i>
+                        Join Discord & Get Free Coins!
+                    </a>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Authentication functions
+        function LoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        
+        function loginWithDiscord() {
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+        
+        function simulateLogin() {
+            isLoggedIn = true;
+            userInfo = {
+                username: 'DonutFan#1234',
+                avatar: 'https://cdn.discordapp.com/embed/avatars/0.png',
+                id: '123456789012345678'
+            };
+            updateLoginButton();
+            showNotification('Successfully logged in with Discord!', 'success');
+        }
+        
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    isLoggedIn = false;
+                    userInfo = null;
+                    updateLoginButton();
+                    showNotification('Logged out successfully', 'info');
+                } else {
+                    showNotification('Logout failed', 'error');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                showNotification('Logout failed', 'error');
+            }
+        }
+        
+        function updateLoginButton() {
+            const loginBtn = document.getElementById('login-btn');
+            const loginText = document.getElementById('login-text');
+            
+            if (isLoggedIn) {
+                loginText.textContent = userInfo.username;
+                loginBtn.href = '#';
+                loginBtn.onclick = (e) => {
+                    e.preventDefault();
+                    logout();
+                };
+            } else {
+                loginText.textContent = 'Login';
+                loginBtn.href = 'login.html';
+                loginBtn.onclick = null;
+            }
+        }
+        
+        // Cart functions
+        function addToCart() {
+            if (!isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            
+            const amount = parseInt(document.getElementById('custom-coins').value) || 12;
+            const pricePerMillion = 0.16;
+            const totalPrice = amount * pricePerMillion;
+            
+            const item = {
+                name: 'DonutSMP Money',
+                amount: amount + 'M',
+                price: totalPrice
+            };
+            
+            cart.push(item);
+            updateCartDisplay();
+            showNotification('DonutSMP Money added to cart!', 'success');
+        }
+
+        function addItemToCart(name, price) {
+            if (!isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            
+            const item = {
+                name: name,
+                amount: '1x',
+                price: price
+            };
+            
+            cart.push(item);
+            updateCartDisplay();
+            showNotification(`${name} added to cart!`, 'success');
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+        
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.length;
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+        
+        function showCart() {
+            if (!isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="color:#b0b0b0;font-style:italic;">Your cart is empty</p>';
+                cartTotal.textContent = '$0.00';
+            } else {
+                let itemsHtml = '';
+                let total = 0;
+                
+                cart.forEach(item => {
+                    total += item.price;
+                    itemsHtml += `
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(24,26,27,0.8);border-radius:8px;margin-bottom:1rem;">
+                            <div style="text-align:left;">
+                                <div style="color:#fff;font-weight:600;">${item.name}</div>
+                                <div style="color:#8ecfff;font-size:0.9rem;">${item.amount}</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="color:#fff;font-weight:700;">$${item.price.toFixed(2)}</div>
+                                <button onclick="removeFromCart(${item.id})" style="background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:0.8rem;margin-top:4px;">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartItems.innerHTML = itemsHtml;
+                cartTotal.textContent = '$' + total.toFixed(2);
+            }
+            
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+        
+        function closeCartModal() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+        
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCartDisplay();
+            showCart(); // Refresh cart display
+        }
+        
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!', 'error');
+                return;
+            }
+            
+            // Store cart data for checkout page
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
+        }
+        
+        // Price calculation
+        function updatePrice() {
+            const amount = parseInt(document.getElementById('custom-coins').value) || 12;
+            const pricePerMillion = 0.16;
+            const totalPrice = amount * pricePerMillion;
+            document.getElementById('customPrice').textContent = '$' + totalPrice.toFixed(2);
+        }
+        
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            Object.assign(notification.style, {
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                padding: '1rem 1.5rem',
+                borderRadius: '8px',
+                color: 'white',
+                fontWeight: '500',
+                zIndex: '3000',
+                maxWidth: '400px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                animation: 'slideInRight 0.3s ease'
+            });
+            
+            switch (type) {
+                case 'success':
+                    notification.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+                    break;
+                case 'error':
+                    notification.style.background = 'linear-gradient(135deg, #f56565, #e53e3e)';
+                    break;
+                case 'info':
+                default:
+                    notification.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                    break;
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+        
+        // Check login state from server session
+        async function checkLoginState() {
+            try {
+                const response = await fetch('/api/user');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.user) {
+                        isLoggedIn = true;
+                        userInfo = {
+                            username: data.user.username,
+                            avatar: data.user.avatar,
+                            id: data.user.id
+                        };
+                        updateLoginButton();
+                    }
+                }
+            } catch (error) {
+                console.log('User not logged in');
+                isLoggedIn = false;
+                userInfo = null;
+                updateLoginButton();
+            }
+        }
+
+        // Category switching functions
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Update active tab
+            document.querySelectorAll('.sorter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            
+            // Update product display
+            updateProductDisplay();
+        }
+
+        function updateProductDisplay() {
+            const productsContainer = document.querySelector('.products');
+            const data = productData[currentCategory];
+            
+            if (currentCategory === 'coins') {
+                // Show coins interface (original design)
+                productsContainer.innerHTML = `
+                    <div class="product-card custom-amount-card" style="position:relative;">
+                        <span class="instant-delivery-badge" style="position: absolute; top: 8px; right: 8px; background: linear-gradient(45deg, #00ff88, #00cc6a); color: #000; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3); z-index: 10;">
+                            <i class="fas fa-bolt"></i> Instant
+                        </span>
+                        <div class="product-icon"><i class="fa-solid fa-coins"></i></div>
+                        <div class="product-title">DonutSMP Money</div>
+                        <input type="number" class="custom-amount-input" id="custom-coins" min="12" max="1000" placeholder="Millions" value="12">
+                        <div class="product-price" id="customPrice">$1.92</div>
+                        <button class="buy-btn" type="button" style="background:#036fff;" onclick="addToCart()">Add to Cart</button>
+                    </div>
+                `;
+                
+                // Re-attach event listener
+                document.getElementById('custom-coins').addEventListener('input', updatePrice);
+            } else {
+                // Show items grid for other categories
+                let itemsHtml = '';
+                const categoryData = currentCategory === 'items' ? 
+                    [...productData.spawners.items, ...productData.elytra.items] : 
+                    data.items;
+                
+                categoryData.forEach(item => {
+                    itemsHtml += `
+                        <div class="product-card" style="position:relative;">
+                            <div class="product-icon">
+                                ${getProductIcon(item.name)}
+                            </div>
+                            <div class="product-title">${item.name}</div>
+                            <div class="product-description" style="color:#8ecfff;font-size:0.8rem;margin:0.5rem 0;">${item.description}</div>
+                            <div class="product-price">$${item.price.toFixed(2)}</div>
+                            <button class="buy-btn" onclick="addItemToCart('${item.name}', ${item.price})">Add to Cart</button>
+                        </div>
+                    `;
+                });
+                
+                productsContainer.innerHTML = itemsHtml;
+            }
+        }
+
+        function getProductIcon(itemName) {
+            // Return appropriate icons for different items
+            if (itemName.includes('Spawner')) return '<i class="fas fa-egg"></i>';
+            if (itemName.includes('Elytra')) return '<i class="fas fa-feather-alt"></i>';
+            if (itemName.includes('Firework')) return '<i class="fas fa-rocket"></i>';
+            if (itemName.includes('Base') || itemName.includes('House') || itemName.includes('Castle') || itemName.includes('Bunker')) return '<i class="fas fa-home"></i>';
+            if (itemName.includes('Armor') || itemName.includes('Sword') || itemName.includes('Bow') || itemName.includes('Crossbow') || itemName.includes('Trident')) return '<i class="fas fa-shield-alt"></i>';
+            if (itemName.includes('Raffle') || itemName.includes('Ticket')) return '<i class="fas fa-ticket-alt"></i>';
+            return '<i class="fas fa-cube"></i>';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimatedProductText();
+            checkLoginState();
+            
+            // Custom amount input listener
+            document.getElementById('custom-coins').addEventListener('input', updatePrice);
+
+            // Category tab listeners
+            document.querySelectorAll('.sorter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const category = tab.getAttribute('data-category');
+                    switchCategory(category);
+                });
+            });
+
+            // Cart icon click
+            document.getElementById('cart-icon').addEventListener('click', showCart);
+            
+            // Close modals when clicking outside
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-bg')) {
+                    e.target.style.display = 'none';
+                }
+            });
+            
+            // Initialize price
+            updatePrice();
+        });
+    </script>
+</body>
+</html>

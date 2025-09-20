@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Refund Policy | DonutSMP IRL Market & Shop</title>
+    <meta name="description" content="Refund policy for DonutSMP IRL market, shop, and trading. Learn about refunds for DonutSMP coins, items, bases, and more. Donut SMP IRL store, dupe, market, shop, trading, and more.">
+    <meta name="theme-color" content="#036fff">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            height: auto !important;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        body {
+            background: transparent;
+            color: #fff;
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #background-image {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: url('https://donutmarket.store/static/store.png') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(4px) brightness(0.4);
+        }
+
+        #background-overlay {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(24, 26, 27, 0.7) 0%, rgba(24, 26, 27, 0.5) 50%, rgba(24, 26, 27, 0.8) 100%);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header img {
+            width: 80px;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .policy-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(35, 39, 43, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(3, 111, 255, 0.3);
+            border-radius: 18px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            animation: slideIn 0.6s ease;
+        }
+
+        .policy-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .disclaimer-section {
+            background: rgba(24, 26, 27, 0.8);
+            border-left: 4px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .disclaimer-section:hover {
+            background: rgba(24, 26, 27, 0.9);
+            border-left-color: #ff5252;
+            transform: translateX(5px);
+        }
+
+        .disclaimer-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .disclaimer-content {
+            color: #e0e0e0;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .important-notice {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button {
+            background: #036fff;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(3, 111, 255, 0.4);
+            margin-top: 2rem;
+        }
+
+        .back-button:hover {
+            background: #005be6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(3, 111, 255, 0.6);
+        }
+
+        .policy-footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .policy-footer p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin: 0;
+            font-style: italic;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 1rem;
+            }
+
+            .policy-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .policy-title {
+                font-size: 1.8rem;
+            }
+
+            .disclaimer-title {
+                font-size: 1.1rem;
+            }
+
+            .disclaimer-content {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(24, 26, 27, 0.8);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #036fff;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #005be6;
+        }
+    </style>
+</head>
+<body>
+    <div id="background-image"></div>
+    <div id="background-overlay"></div>
+
+    <div class="content-wrapper">
+        <div class="header">
+            <img src="https://donutmarket.store/static/logo1.png" alt="DonutMarket Logo">
+            <h1>DonutMarket</h1>
+            <p>Terms, Policies & Important Information</p>
+        </div>
+
+        <div class="policy-container">
+            <h1 class="policy-title">
+                <i class="fas fa-shield-alt"></i>
+                Refund Policy
+            </h1>
+
+            <div class="disclaimer-section">
+                <div class="disclaimer-title">
+                    <i class="fas fa-home"></i>
+                    Base/Stash Disclaimer
+                </div>
+                <div class="important-notice">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: We cannot guarantee that bases or stashes will contain good or plentiful items.
+                </div>
+                <p class="disclaimer-content">
+                    The quality and quantity of items in bases/stashes may vary significantly. Purchases are made as-is based on the available information and previews provided. 
+                    <br><br>
+                    <strong>Note:</strong> When we say a base was "Found", this means the base was discovered by us in the game world, not built by us. These are existing bases that we have located and are offering for sale.
+                </p>
+            </div>
+
+            <div class="disclaimer-section">
+                <div class="disclaimer-title">
+                    <i class="fas fa-bomb"></i>
+                    Griefing/Compromise Disclaimer
+                </div>
+                <div class="important-notice">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: If the base is found griefed or compromised, DonutMarket is not responsible for any loss or damage.
+                </div>
+                <p class="disclaimer-content">
+                    Minecraft servers can be unpredictable environments where bases may be discovered and griefed by other players. We cannot control or prevent such actions, and purchases are made with this understanding.
+                </p>
+            </div>
+
+            <div class="disclaimer-section">
+                <div class="disclaimer-title">
+                    <i class="fas fa-user-edit"></i>
+                    Username Entry Disclaimer
+                </div>
+                <div class="important-notice">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: We cannot refund or send more DonutSMP money if you enter the wrong username at checkout.
+                </div>
+                <p class="disclaimer-content">
+                    Please double-check your Minecraft username before purchasing. Ensure that your username is spelled correctly and matches your in-game account exactly. We are not responsible for items sent to incorrect usernames.
+                </p>
+            </div>
+
+            <div class="disclaimer-section">
+                <div class="disclaimer-title">
+                    <i class="fas fa-ban"></i>
+                    IRL Trading Disclaimer / DonutSMP
+                </div>
+                <div class="important-notice">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: We are not responsible if you get banned for IRL trading or using any of our services, as it is against the server rules.
+                </div>
+                <p class="disclaimer-content">
+                    Please be aware of the risks before making a purchase or using our services. IRL (In Real Life) trading may violate server terms of service, and we cannot be held responsible for any consequences including account bans or suspensions.
+                </p>
+            </div>
+
+            <div class="disclaimer-section">
+                <div class="disclaimer-title">
+                    <i class="fas fa-shipping-fast"></i>
+                    Delivery/Contact Disclaimer
+                </div>
+                <div class="important-notice">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: If you purchase an item and we attempt to deliver it but are unable to contact you, or you do not respond to our messages within 3 days, we reserve the right to void your order without a refund.
+                </div>
+                <p class="disclaimer-content">
+                    It is your responsibility to remain available for delivery and respond to our contact attempts. Please ensure your Discord notifications are enabled and check your messages regularly after making a purchase.
+                </p>
+            </div>
+
+            <div class="disclaimer-section">
+                <div class="disclaimer-title">
+                    <i class="fas fa-gift"></i>
+                    Mystery Box Disclaimer
+                </div>
+                <div class="important-notice">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: We will not refund you if you are unhappy with your mystery box.
+                </div>
+                <p class="disclaimer-content">
+                    Mystery boxes contain random items and the contents are not guaranteed to meet your expectations. The nature of mystery boxes means that results may vary significantly, and all sales are final regardless of the items received.
+                </p>
+            </div>
+
+            <div class="policy-footer">
+                <p>By making a purchase, you acknowledge that you have read, understood, and agree to these terms and disclaimers.</p>
+                <p>Last updated: <span id="last-updated"></span></p>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="replica.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Store
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set last updated date
+        document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe disclaimer sections for staggered animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const disclaimerSections = document.querySelectorAll('.disclaimer-section');
+            disclaimerSections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(section);
+            });
+        });
+
+        // Add hover effects for better interactivity
+        document.querySelectorAll('.disclaimer-section').forEach(section => {
+            section.addEventListener('mouseenter', () => {
+                section.style.boxShadow = '0 8px 32px rgba(3, 111, 255, 0.2)';
+            });
+            
+            section.addEventListener('mouseleave', () => {
+                section.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

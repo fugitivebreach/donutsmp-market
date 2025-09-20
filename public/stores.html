@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Minecraft Stores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #036fff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn, .back-btn {
+            background: rgba(3, 111, 255, 0.1);
+            border: 1px solid rgba(3, 111, 255, 0.3);
+            color: #036fff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover, .back-btn:hover {
+            background: rgba(3, 111, 255, 0.2);
+            border-color: #036fff;
+        }
+
+        .cart-btn {
+            background: #48bb78;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .cart-btn:hover {
+            background: #38a169;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e53e3e;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(3, 111, 255, 0.1) 0%, rgba(72, 187, 120, 0.1) 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #036fff, #48bb78);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Store List View */
+        .stores-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .store-card {
+            background: rgba(35, 39, 43, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .store-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(3, 111, 255, 0.2);
+            border-color: rgba(3, 111, 255, 0.3);
+        }
+
+        .store-banner {
+            height: 120px;
+            background: linear-gradient(135deg, #036fff, #48bb78);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .store-banner img {
+            max-height: 80px;
+            max-width: 200px;
+            object-fit: contain;
+            filter: brightness(1.1);
+            z-index: 2;
+        }
+
+        .store-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .store-info {
+            padding: 1.5rem;
+        }
+
+        .store-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .store-description {
+            color: #8ecfff;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .store-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .product-count {
+            background: rgba(3, 111, 255, 0.2);
+            color: #036fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .store-owner {
+            color: #b0b0b0;
+            font-size: 0.8rem;
+        }
+
+        .view-store-btn {
+            width: 100%;
+            background: #036fff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-store-btn:hover {
+            background: #0256e6;
+            transform: translateY(-1px);
+        }
+
+        /* Individual Store View */
+        .store-view {
+            display: none;
+        }
+
+        .store-header {
+            background: linear-gradient(135deg, rgba(3, 111, 255, 0.2) 0%, rgba(72, 187, 120, 0.2) 100%);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .store-header img {
+            max-height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        .store-header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Payment Methods Section */
+        .payment-methods-section {
+            background: rgba(35, 39, 43, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+
+        .payment-methods-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #036fff;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .payment-method {
+            background: rgba(3, 111, 255, 0.1);
+            border: 1px solid rgba(3, 111, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .payment-method:hover {
+            background: rgba(3, 111, 255, 0.2);
+            border-color: #036fff;
+            transform: translateY(-2px);
+        }
+
+        .payment-method-icon {
+            font-size: 1.5rem;
+            color: #036fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-method-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .products-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: rgba(35, 39, 43, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(3, 111, 255, 0.2);
+            border-color: rgba(3, 111, 255, 0.3);
+        }
+
+        .product-card.currency-card {
+            border: 2px solid rgba(72, 187, 120, 0.3);
+        }
+
+        .product-card.currency-card:hover {
+            border-color: #48bb78;
+            box-shadow: 0 10px 30px rgba(72, 187, 120, 0.2);
+        }
+
+        .instant-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-image {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(3, 111, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(3, 111, 255, 0.2);
+        }
+
+        .product-image img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+        }
+
+        .product-image i {
+            font-size: 2rem;
+            color: #036fff;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .product-description {
+            color: #8ecfff;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #48bb78;
+            margin-bottom: 1rem;
+        }
+
+        .currency-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(24, 26, 27, 0.8);
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .currency-input:focus {
+            outline: none;
+            border-color: #48bb78;
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: #036fff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .buy-btn:hover {
+            background: #0256e6;
+            transform: translateY(-1px);
+        }
+
+        .currency-card .buy-btn {
+            background: #48bb78;
+        }
+
+        .currency-card .buy-btn:hover {
+            background: #38a169;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(35, 39, 43, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            color: #036fff;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #48bb78;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .stores-grid, .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1 id="header-title">Minecraft Stores</h1>
+            </div>
+            <div class="nav-buttons">
+                <a href="/" class="nav-btn">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <button class="back-btn" id="back-btn" onclick="showStoreList()" style="display: none;">
+                    <i class="fas fa-arrow-left"></i> Back to Stores
+                </button>
+                <button class="cart-btn" onclick="showCart()">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                    <span class="cart-count" id="cart-count" style="display: none;">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Store List View -->
+    <div id="store-list-view">
+        <section class="hero">
+            <h1>Minecraft Stores</h1>
+            <p>Browse and shop from multiple Minecraft server stores</p>
+        </section>
+
+        <section class="stores-section">
+            <div class="stores-grid" id="stores-grid">
+                <!-- Stores will be loaded dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Individual Store View -->
+    <div id="store-view" class="store-view">
+        <div class="store-header">
+            <img id="current-store-banner" src="" alt="Store Banner">
+            <h1 id="current-store-name">Store Name</h1>
+            <p id="current-store-description">Store Description</p>
+        </div>
+
+        <div class="payment-methods-section" id="payment-methods-section">
+            <div class="payment-methods-title">
+                <i class="fas fa-credit-card"></i>
+                Accepted Payment Methods
+            </div>
+            <div class="payment-methods-grid" id="payment-methods-grid">
+                <!-- Payment methods will be loaded dynamically -->
+            </div>
+        </div>
+
+        <section class="products-section">
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeCart()">&times;</button>
+            <h2><i class="fas fa-shopping-cart"></i> Shopping Cart</h2>
+            <div id="cart-items">
+                <p style="text-align: center; color: #8ecfff;">Your cart is empty</p>
+            </div>
+            <div class="cart-total" id="cart-total" style="display: none;">
+                Total: $0.00
+            </div>
+            <button class="buy-btn" onclick="proceedToCheckout()" id="checkout-btn" style="display: none;">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let allStores = [];
+        let currentStore = null;
+        let cart = [];
+
+        // Load all stores
+        async function loadStores() {
+            try {
+                const response = await fetch('/api/all-stores');
+                allStores = await response.json();
+                displayStores();
+            } catch (error) {
+                console.error('Failed to load stores:', error);
+            }
+        }
+
+        function displayStores() {
+            const grid = document.getElementById('stores-grid');
+            grid.innerHTML = '';
+
+            allStores.forEach(store => {
+                const storeCard = createStoreCard(store);
+                grid.appendChild(storeCard);
+            });
+        }
+
+        function createStoreCard(store) {
+            const card = document.createElement('div');
+            card.className = 'store-card';
+            card.onclick = () => viewStore(store.storeId);
+
+            const productCount = store.storeProducts ? store.storeProducts.length : 0;
+
+            card.innerHTML = `
+                <div class="store-banner">
+                    <img src="${store.storeBannerImage}" alt="${store.storeName}" onerror="this.style.display='none'">
+                </div>
+                <div class="store-info">
+                    <div class="store-name">${store.storeName}</div>
+                    <div class="store-description">${store.storeDescription}</div>
+                    <div class="store-stats">
+                        <div class="product-count">
+                            <i class="fas fa-box"></i> ${productCount} Products
+                        </div>
+                        <div class="store-owner">
+                            ${store.storeOwner || 'Store Owner'}
+                        </div>
+                    </div>
+                    <button class="view-store-btn">
+                        <i class="fas fa-store"></i> View Store
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function viewStore(storeId) {
+            const store = allStores.find(s => s.storeId === storeId);
+            if (!store) return;
+
+            currentStore = store;
+
+            // Update store view
+            document.getElementById('current-store-banner').src = store.storeBannerImage;
+            document.getElementById('current-store-name').textContent = store.storeName;
+            document.getElementById('current-store-description').textContent = store.storeDescription;
+            document.getElementById('header-title').textContent = store.storeName;
+
+            // Load payment methods
+            loadPaymentMethods(store.paymentMethods || []);
+
+            // Load products
+            loadProducts(store.storeProducts);
+
+            // Switch views
+            document.getElementById('store-list-view').style.display = 'none';
+            document.getElementById('store-view').style.display = 'block';
+            document.getElementById('back-btn').style.display = 'inline-flex';
+        }
+
+        function showStoreList() {
+            document.getElementById('store-list-view').style.display = 'block';
+            document.getElementById('store-view').style.display = 'none';
+            document.getElementById('back-btn').style.display = 'none';
+            document.getElementById('header-title').textContent = 'Minecraft Stores';
+            currentStore = null;
+        }
+
+        function loadPaymentMethods(paymentMethods) {
+            const grid = document.getElementById('payment-methods-grid');
+            const section = document.getElementById('payment-methods-section');
+            
+            if (!paymentMethods || paymentMethods.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+            
+            section.style.display = 'block';
+            grid.innerHTML = '';
+
+            paymentMethods.forEach(method => {
+                const methodCard = createPaymentMethodCard(method);
+                grid.appendChild(methodCard);
+            });
+        }
+
+        function createPaymentMethodCard(method) {
+            const card = document.createElement('div');
+            card.className = 'payment-method';
+            
+            const iconInfo = getPaymentMethodIcon(method);
+            
+            card.innerHTML = `
+                <div class="payment-method-icon">
+                    ${iconInfo.html}
+                </div>
+                <div class="payment-method-name">${method}</div>
+            `;
+            
+            return card;
+        }
+
+        function getPaymentMethodIcon(method) {
+            const methodLower = method.toLowerCase();
+            
+            if (methodLower.includes('paypal')) {
+                return { html: '<i class="fab fa-paypal"></i>' };
+            }
+            if (methodLower.includes('venmo')) {
+                return { html: '<div style="background: #3D95CE; color: white; border-radius: 4px; padding: 4px 8px; font-weight: bold; font-size: 0.8rem;">V</div>' };
+            }
+            if (methodLower.includes('cashapp') || methodLower.includes('cash app')) {
+                return { html: '<div style="background: #00D632; color: white; border-radius: 4px; padding: 4px 6px; font-weight: bold; font-size: 0.8rem;">$</div>' };
+            }
+            if (methodLower.includes('zelle')) {
+                return { html: '<div style="background: #6D1ED4; color: white; border-radius: 4px; padding: 4px 6px; font-weight: bold; font-size: 0.8rem;">Z</div>' };
+            }
+            if (methodLower.includes('stripe')) {
+                return { html: '<i class="fab fa-stripe"></i>' };
+            }
+            if (methodLower.includes('bitcoin')) {
+                return { html: '<i class="fab fa-bitcoin"></i>' };
+            }
+            if (methodLower.includes('ethereum')) {
+                return { html: '<i class="fab fa-ethereum"></i>' };
+            }
+            if (methodLower.includes('credit') || methodLower.includes('card')) {
+                return { html: '<i class="fas fa-credit-card"></i>' };
+            }
+            
+            // Default icon
+            return { html: '<i class="fas fa-money-bill-wave"></i>' };
+        }
+
+        function loadProducts(products) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            products.forEach(product => {
+                const productCard = createProductCard(product);
+                grid.appendChild(productCard);
+            });
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = `product-card ${product.productType === 'currency' ? 'currency-card' : ''}`;
+            
+            const imageHtml = product.productImage 
+                ? `<img src="${product.productImage}" alt="${product.productName}">`
+                : `<i class="fas fa-${getProductIcon(product.productName)}"></i>`;
+
+            const instantBadge = product.instantDelivery 
+                ? '<div class="instant-badge"><i class="fas fa-bolt"></i> Instant</div>'
+                : '';
+
+            const priceDisplay = product.productType === 'currency' 
+                ? `<div class="product-price" id="price-${product.productName.replace(/\s+/g, '-')}">${product.productCurrency} ${(product.defaultAmount * product.productPrice).toFixed(2)}</div>`
+                : `<div class="product-price">${product.productCurrency} ${product.productPrice.toFixed(2)}</div>`;
+
+            const inputField = product.productType === 'currency' 
+                ? `<input type="number" class="currency-input" min="${product.minAmount}" max="${product.maxAmount}" value="${product.defaultAmount}" onchange="updateCurrencyPrice('${product.productName}', this.value)" placeholder="Amount (${product.productUnit})">`
+                : '';
+
+            card.innerHTML = `
+                ${instantBadge}
+                <div class="product-image">
+                    ${imageHtml}
+                </div>
+                <div class="product-title">${product.productName}</div>
+                <div class="product-description">${product.productDescription || ''}</div>
+                ${inputField}
+                ${priceDisplay}
+                <button class="buy-btn" onclick="addToCart('${product.productName}')">
+                    Add to Cart
+                </button>
+            `;
+
+            return card;
+        }
+
+        function getProductIcon(productName) {
+            const name = productName.toLowerCase();
+            if (name.includes('spawner')) return 'egg';
+            if (name.includes('elytra')) return 'feather-alt';
+            if (name.includes('armor') || name.includes('sword') || name.includes('bow')) return 'shield-alt';
+            if (name.includes('base') || name.includes('house')) return 'home';
+            if (name.includes('money') || name.includes('coin') || name.includes('gem')) return 'coins';
+            if (name.includes('rank') || name.includes('vip') || name.includes('mvp')) return 'crown';
+            return 'cube';
+        }
+
+        function updateCurrencyPrice(productName, amount) {
+            if (!currentStore) return;
+            const product = currentStore.storeProducts.find(p => p.productName === productName);
+            if (product) {
+                // Validate amount within min/max range
+                let validAmount = parseInt(amount);
+                if (validAmount < product.minAmount) {
+                    validAmount = product.minAmount;
+                    // Update the input field to show corrected value
+                    const input = document.querySelector(`input[onchange*="${productName}"]`);
+                    if (input) input.value = validAmount;
+                    showNotification(`Minimum amount is ${product.minAmount}${product.productUnit}`, 'warning');
+                }
+                if (validAmount > product.maxAmount) {
+                    validAmount = product.maxAmount;
+                    // Update the input field to show corrected value
+                    const input = document.querySelector(`input[onchange*="${productName}"]`);
+                    if (input) input.value = validAmount;
+                    showNotification(`Maximum amount is ${product.maxAmount}${product.productUnit}`, 'warning');
+                }
+                
+                const total = validAmount * product.productPrice;
+                const priceElement = document.getElementById(`price-${productName.replace(/\s+/g, '-')}`);
+                priceElement.textContent = `${product.productCurrency} ${total.toFixed(2)}`;
+            }
+        }
+
+        function addToCart(productName) {
+            if (!currentStore) return;
+            const product = currentStore.storeProducts.find(p => p.productName === productName);
+            if (!product) return;
+
+            let amount = 1;
+            let price = product.productPrice;
+
+            if (product.productType === 'currency') {
+                const input = document.querySelector(`input[onchange*="${productName}"]`);
+                amount = parseInt(input.value) || product.defaultAmount;
+                
+                // Validate amount within min/max range before adding to cart
+                if (amount < product.minAmount) {
+                    showNotification(`Minimum amount is ${product.minAmount}${product.productUnit}`, 'warning');
+                    return;
+                }
+                if (amount > product.maxAmount) {
+                    showNotification(`Maximum amount is ${product.maxAmount}${product.productUnit}`, 'warning');
+                    return;
+                }
+                
+                price = amount * product.productPrice;
+            }
+
+            const cartItem = {
+                name: product.productName,
+                amount: product.productType === 'currency' ? `${amount}${product.productUnit}` : '1x',
+                price: price,
+                currency: product.productCurrency,
+                store: currentStore.storeName
+            };
+
+            cart.push(cartItem);
+            updateCartDisplay();
+            
+            showNotification(`${product.productName} added to cart!`);
+        }
+
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+            cartCount.style.display = cart.length > 0 ? 'flex' : 'none';
+        }
+
+        function showCart() {
+            const modal = document.getElementById('cart-modal');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: #8ecfff;">Your cart is empty</p>';
+                cartTotal.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+            } else {
+                let total = 0;
+                cartItems.innerHTML = cart.map((item, index) => {
+                    total += item.price;
+                    return `
+                        <div class="cart-item">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                <small>${item.amount} • ${item.store}</small>
+                            </div>
+                            <div>
+                                <strong>${item.currency} ${item.price.toFixed(2)}</strong>
+                                <button onclick="removeFromCart(${index})" style="margin-left: 10px; background: #e53e3e; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                cartTotal.textContent = `Total: ${cart[0]?.currency || 'USD'} ${total.toFixed(2)}`;
+                cartTotal.style.display = 'block';
+                checkoutBtn.style.display = 'block';
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').style.display = 'none';
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+            showCart();
+        }
+
+        function proceedToCheckout() {
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            sessionStorage.setItem('storeConfig', JSON.stringify(currentStore || {}));
+            window.location.href = '/checkout.html';
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            const backgroundColor = type === 'warning' ? '#f56565' : '#48bb78';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${backgroundColor};
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadStores);
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
